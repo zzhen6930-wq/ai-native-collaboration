@@ -1,0 +1,1329 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Native 协作方案</title>
+<style>
+  :root {
+    --primary: #2563EB;
+    --primary-deep: #1E40AF;
+    --primary-light: #DBEAFE;
+    --green: #10B981;
+    --green-light: #D1FAE5;
+    --yellow: #F59E0B;
+    --yellow-light: #FEF3C7;
+    --red: #EF4444;
+    --red-light: #FEE2E2;
+    --purple: #8B5CF6;
+    --purple-light: #EDE9FE;
+    --teal: #14B8A6;
+    --teal-light: #CCFBF1;
+    --pink: #EC4899;
+    --pink-light: #FCE7F3;
+    --ink: #0F172A;
+    --ink-2: #1E293B;
+    --grey: #64748B;
+    --grey-light: #F1F5F9;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --border: #E2E8F0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+  }
+
+  /* ============ Header ============ */
+  .doc-header {
+    padding: 64px 56px 56px;
+    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #8B5CF6 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 90% 20%, rgba(255,255,255,.12), transparent 35%),
+      radial-gradient(circle at 10% 80%, rgba(236, 72, 153, .15), transparent 40%);
+    pointer-events: none;
+  }
+  .doc-header .label {
+    position: relative;
+    display: inline-block;
+    background: rgba(255,255,255,.18);
+    backdrop-filter: blur(10px);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+  }
+  .doc-header h1 {
+    position: relative;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+  .doc-header .subtitle {
+    position: relative;
+    font-size: 17px;
+    opacity: 0.92;
+    font-weight: 500;
+    line-height: 1.6;
+    max-width: 620px;
+  }
+
+  /* ============ TOC ============ */
+  .toc {
+    background: var(--grey-light);
+    border-radius: 12px;
+    padding: 22px 28px;
+    margin: -28px 56px 0;
+    position: relative;
+    z-index: 2;
+    border: 1px solid var(--border);
+  }
+  .toc h3 {
+    margin-top: 0;
+    font-size: 13px;
+    color: var(--grey);
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+  .toc ol {
+    list-style: none;
+    padding-left: 0;
+    columns: 2;
+    column-gap: 28px;
+  }
+  .toc li {
+    margin-bottom: 8px;
+    break-inside: avoid;
+  }
+  .toc a {
+    color: var(--primary-deep);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+  }
+  .toc a:hover { color: var(--primary); text-decoration: underline; }
+  .toc a .num {
+    display: inline-block;
+    width: 24px;
+    color: var(--grey);
+    font-weight: 700;
+  }
+
+  /* ============ Section 通用 ============ */
+  section {
+    padding: 56px 56px;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  .section-num {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 36px;
+    font-weight: 900;
+    font-size: 15px;
+    margin-right: 14px;
+  }
+  h2 {
+    font-size: 30px;
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+  }
+  h2 .em { color: var(--primary); }
+  h3 {
+    font-size: 19px;
+    font-weight: 800;
+    margin-top: 28px;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 800;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    color: var(--ink-2);
+  }
+  p { margin-bottom: 12px; color: var(--ink-2); }
+  ul, ol { padding-left: 24px; margin-bottom: 12px; }
+  li { margin-bottom: 6px; color: var(--ink-2); }
+  strong { color: var(--ink); font-weight: 700; }
+  em { font-style: normal; }
+  blockquote {
+    border-left: 4px solid var(--primary);
+    background: var(--primary-light);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 8px 8px 0;
+    color: var(--primary-deep);
+    font-size: 14px;
+  }
+  blockquote.warn {
+    border-color: var(--yellow);
+    background: var(--yellow-light);
+    color: #92400E;
+  }
+  blockquote.tip {
+    border-color: var(--teal);
+    background: var(--teal-light);
+    color: #115E59;
+  }
+  code {
+    background: var(--grey-light);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 13px;
+    color: var(--primary-deep);
+  }
+  pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    padding: 18px 22px;
+    border-radius: 12px;
+    overflow-x: auto;
+    margin: 12px 0 16px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  pre .k { color: #93C5FD; font-weight: bold; }
+  pre .arrow { color: #FBBF24; }
+  pre .num-circle { color: #FBBF24; font-weight: bold; }
+
+  /* ============ Table ============ */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+  th {
+    background: linear-gradient(180deg, #F1F5F9, #E2E8F0);
+    color: var(--ink);
+    text-align: left;
+    padding: 12px 14px;
+    font-weight: 700;
+    font-size: 13px;
+    border-bottom: 2px solid var(--border);
+  }
+  td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--grey-light); }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .badge-A { background: var(--green-light); color: #065F46; }
+  .badge-B { background: var(--purple-light); color: #5B21B6; }
+  .badge-C { background: var(--teal-light); color: #115E59; }
+
+  /* 三层职责切分图 */
+  .responsibility-layers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .resp-card {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+  }
+  .resp-card.r-prompt { border-color: var(--primary); }
+  .resp-card.r-table { border-color: var(--purple); }
+  .resp-card.r-skill { border-color: var(--green); }
+  .resp-card .resp-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  .r-prompt .resp-icon { background: var(--primary-light); }
+  .r-table .resp-icon { background: var(--purple-light); }
+  .r-skill .resp-icon { background: var(--green-light); }
+  .resp-card .resp-title {
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .resp-card .resp-desc {
+    font-size: 13px;
+    color: var(--grey);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .resp-card .resp-who {
+    font-size: 12px;
+    background: var(--grey-light);
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+
+  /* ============ 架构示意图 ============ */
+  .arch-diagram {
+    background: #FAFBFC;
+    border-radius: 16px;
+    padding: 28px;
+    margin: 20px 0;
+    border: 1px solid var(--border);
+  }
+  .arch-layer {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .arch-layer.layer-1 { border-color: var(--primary); }
+  .arch-layer.layer-2 { border-color: var(--purple); }
+  .arch-layer.layer-3 { border-color: var(--grey); background: var(--grey-light); }
+  .arch-layer .layer-label {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--grey);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .arch-layer.layer-1 .layer-label { color: var(--primary); }
+  .arch-layer.layer-2 .layer-label { color: var(--purple); }
+  .arch-layer .layer-items {
+    display: grid;
+    gap: 10px;
+  }
+  .layer-1 .layer-items { grid-template-columns: repeat(4, 1fr); }
+  .layer-2 .layer-items { grid-template-columns: repeat(3, 1fr); }
+  .layer-3 .layer-items { grid-template-columns: repeat(4, 1fr); }
+  .layer-item {
+    background: var(--grey-light);
+    border-radius: 8px;
+    padding: 10px 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .arch-layer.layer-1 .layer-item { background: var(--primary-light); color: var(--primary-deep); }
+  .arch-layer.layer-2 .layer-item { background: var(--purple-light); color: #5B21B6; }
+  .arch-layer .layer-foot {
+    text-align: center;
+    font-size: 12px;
+    color: var(--grey);
+    margin-top: 10px;
+    font-style: italic;
+  }
+  .arch-arrow {
+    text-align: center;
+    color: var(--grey);
+    font-size: 22px;
+    margin: -4px 0;
+  }
+
+  /* Skill 层增强：分类色块容器 */
+  .skill-category-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .skill-category-box {
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .skill-category-box.cat-a { background: var(--green-light); border: 1.5px solid var(--green); }
+  .skill-category-box.cat-b { background: var(--purple-light); border: 1.5px solid var(--purple); }
+  .skill-category-box.cat-c { background: var(--teal-light); border: 1.5px solid var(--teal); }
+  .skill-category-box .cat-title {
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  .skill-category-box.cat-a .cat-title { color: #065F46; }
+  .skill-category-box.cat-b .cat-title { color: #5B21B6; }
+  .skill-category-box.cat-c .cat-title { color: #115E59; }
+  .skill-category-box .cat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .skill-category-box .cat-list .skill-item {
+    background: #fff;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .skill-category-box .cat-list .skill-item .id-tag {
+    font-weight: 800;
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+  .skill-category-box.cat-a .id-tag { background: var(--green); color: #fff; }
+  .skill-category-box.cat-b .id-tag { background: var(--purple); color: #fff; }
+  .skill-category-box.cat-c .id-tag { background: var(--teal); color: #fff; }
+
+  /* 基础能力层增强 */
+  .base-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .base-grid .base-item {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  /* Skill 卡片 */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .skill-card {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .skill-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.06);
+  }
+  .skill-card .skill-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .skill-card.cat-a { border-color: var(--green); }
+  .skill-card.cat-a .skill-tag { background: var(--green-light); color: #065F46; }
+  .skill-card.cat-b { border-color: var(--purple); }
+  .skill-card.cat-b .skill-tag { background: var(--purple-light); color: #5B21B6; }
+  .skill-card.cat-c { border-color: var(--teal); }
+  .skill-card.cat-c .skill-tag { background: var(--teal-light); color: #115E59; }
+  .skill-card .skill-name {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .skill-card .skill-desc {
+    font-size: 13px;
+    color: var(--grey);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .skill-card .skill-scenes {
+    font-size: 12px;
+    color: var(--ink-2);
+    background: var(--grey-light);
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin-top: 8px;
+  }
+  .skill-card .skill-scenes b {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--ink);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ============ Agent 配置可视化 ============ */
+  .agent-spec {
+    background: #fff;
+    border: 2px solid var(--primary);
+    border-radius: 16px;
+    padding: 28px;
+    margin: 20px 0;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, .08);
+  }
+  .agent-spec .agent-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 18px;
+    border-bottom: 2px dashed var(--border);
+    margin-bottom: 22px;
+  }
+  .agent-spec .agent-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--purple));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    flex-shrink: 0;
+  }
+  .agent-spec .agent-title { flex: 1; }
+  .agent-spec .agent-title .name {
+    font-size: 19px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .agent-spec .agent-title .id {
+    font-size: 13px;
+    color: var(--grey);
+  }
+
+  .spec-section { margin-bottom: 22px; }
+  .spec-section .spec-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+
+  .skill-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .skill-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .skill-chip.a { border-color: var(--green); background: var(--green-light); color: #065F46; }
+  .skill-chip.b { border-color: var(--purple); background: var(--purple-light); color: #5B21B6; }
+  .skill-chip.c { border-color: var(--teal); background: var(--teal-light); color: #115E59; }
+  .skill-chip .icon-s {
+    font-weight: 800;
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,.6);
+  }
+
+  /* ============ 多 Agent 协同流程图（V2 流程式） ============ */
+  .agent-flow-diagram {
+    background: linear-gradient(135deg, #F0F7FF, #FAF5FF);
+    border-radius: 16px;
+    padding: 36px 28px;
+    margin: 20px 0;
+    border: 1px solid var(--border);
+  }
+
+  .flow-trigger {
+    display: inline-block;
+    background: #fff;
+    border: 2px dashed var(--primary);
+    border-radius: 10px;
+    padding: 8px 18px;
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+  }
+  .flow-center { text-align: center; }
+
+  .flow-arrow {
+    text-align: center;
+    color: var(--primary);
+    font-size: 18px;
+    line-height: 1;
+    margin: 4px 0;
+    font-weight: bold;
+  }
+  .flow-arrow .label-text {
+    display: inline-block;
+    margin-left: 6px;
+    background: rgba(37, 99, 235, .1);
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--primary);
+    vertical-align: middle;
+  }
+
+  .flow-pair {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 0;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .flow-pair .pair-arrow {
+    text-align: center;
+    color: var(--primary);
+    font-weight: 800;
+  }
+  .flow-pair .pair-arrow .pa-label {
+    display: block;
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .agent-node-card {
+    background: #fff;
+    border: 2px solid var(--primary);
+    border-radius: 14px;
+    padding: 16px 18px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, .08);
+  }
+  .agent-node-card.placeholder {
+    border-style: dashed;
+    background: #F8FAFC;
+    opacity: 0.85;
+  }
+  .agent-node-card .ac-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .agent-node-card .ac-emoji {
+    font-size: 22px;
+    background: var(--primary-light);
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+  }
+  .agent-node-card .ac-title {
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .agent-node-card .ac-actions {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  .agent-node-card .ac-actions li {
+    font-size: 12px;
+    color: var(--ink-2);
+    padding: 2px 0;
+    margin-bottom: 0;
+  }
+  .agent-node-card .ac-actions li::before {
+    content: "•";
+    color: var(--primary);
+    font-weight: bold;
+    margin-right: 6px;
+  }
+  .agent-node-card.placeholder .ac-emoji { background: var(--grey-light); }
+
+  /* Skill 用途表格强化 */
+  .skill-usage-table th:first-child { width: 36%; }
+
+
+  /* Process flow */
+  .process-flow {
+    background: #FAFBFC;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .process-flow .pf-step {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px 12px 50px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    position: relative;
+  }
+  .process-flow .pf-step::before {
+    content: counter(pf-step);
+    counter-increment: pf-step;
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 12px;
+  }
+  .process-flow { counter-reset: pf-step; }
+
+  footer {
+    background: var(--ink);
+    color: var(--grey);
+    padding: 24px;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    .container { box-shadow: none; }
+    section { padding: 32px 32px; page-break-inside: avoid; }
+    .agent-spec { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ============ HEADER ============ -->
+<div class="doc-header">
+  <span class="label">PRODUCT DOCUMENT</span>
+  <h1>AI Native 协作方案</h1>
+  <p class="subtitle">平台共性 Skill + 每个 Agent 一份 Prompt + 多维表配置参数<br>支撑产品部门多 Agent 场景的标准化建设</p>
+</div>
+
+<!-- ============ TOC ============ -->
+<div class="toc">
+  <h3>📑 目录</h3>
+  <ol>
+    <li><a href="#sec-1"><span class="num">1.</span>背景与定位</a></li>
+    <li><a href="#sec-2"><span class="num">2.</span>平台总体架构</a></li>
+    <li><a href="#sec-3"><span class="num">3.</span>平台共性能力（9 大 Skill）</a></li>
+    <li><a href="#sec-4"><span class="num">4.</span>多 Agent 协同关系</a></li>
+    <li><a href="#sec-5"><span class="num">5.</span>垂类 Agent 配置范式</a></li>
+    <li><a href="#sec-6"><span class="num">6.</span>群运维场景：首个落地 Demo</a></li>
+    <li><a href="#sec-7"><span class="num">7.</span>评审 Agent 落地示意</a></li>
+    <li><a href="#sec-8"><span class="num">8.</span>体验官 Agent 落地示意</a></li>
+  </ol>
+</div>
+
+<!-- ============ Section 1 ============ -->
+<section id="sec-1">
+  <h2><span class="section-num">1</span>背景与<span class="em">定位</span></h2>
+
+  <h3>1.1 背景</h3>
+  <p>随着 AI Agent 在产品部门的应用扩展，多个垂类场景已浮现：</p>
+  <table>
+    <thead><tr><th style="width:50%">场景</th><th>典型 Agent</th></tr></thead>
+    <tbody>
+      <tr><td>用户问题反馈群运维</td><td>群运维 Agent</td></tr>
+      <tr><td>需求评审</td><td>评审 Agent</td></tr>
+      <tr><td>测试 / 发布反馈</td><td>体验官 Agent</td></tr>
+      <tr><td>开发对接</td><td>开发 Agent</td></tr>
+      <tr><td>未来扩展</td><td>PM Agent / 运营 Agent / ...</td></tr>
+    </tbody>
+  </table>
+
+  <h3>1.2 核心问题</h3>
+  <p>如果每个 Agent 都从 0 搭建，会导致 <strong>群消息监听、知识库读写、人工审核、定时调度等能力被重复建设</strong>。</p>
+
+  <h3>1.3 方案核心思路</h3>
+  <blockquote>
+    <strong>平台共性 Skill + 每个 Agent 一份 Prompt + 多维表配置参数</strong>
+  </blockquote>
+  <ul>
+    <li><strong>平台共性 Skill</strong>：把跨场景重复的能力抽象为 9 个标准 Skill，由开发统一实现</li>
+    <li><strong>每个 Agent 一份 Prompt</strong>：业务规则、流程编排、判断逻辑、输出风格写在 Prompt 里</li>
+    <li><strong>多维表配置参数</strong>：分类映射、模板内容、关键字词典等结构化数据放在多维表，可灵活编辑</li>
+  </ul>
+  <p><strong>新场景接入策略</strong>：</p>
+  <ul>
+    <li>大部分新场景能通过 <strong>复用现有 Skill + 垂类场景 Prompt + 调整多维表配置</strong> 快速接入</li>
+    <li>遇到全新能力（如调用某外部系统）时，仍需新增对应 Skill，但保持 Skill 与场景解耦</li>
+  </ul>
+
+  <h3>1.4 三者职责切分</h3>
+  <p>为避免后续维护时出现"<strong>同一件事多处定义</strong>"，三层职责必须清晰：</p>
+
+  <div class="responsibility-layers">
+    <div class="resp-card r-prompt">
+      <div class="resp-icon">📜</div>
+      <div class="resp-title">系统 Prompt</div>
+      <div class="resp-desc">业务规则、流程顺序、判断逻辑、输出风格</div>
+      <div class="resp-who">👤 产品 直接写</div>
+    </div>
+    <div class="resp-card r-table">
+      <div class="resp-icon">📊</div>
+      <div class="resp-title">多维表配置</div>
+      <div class="resp-desc">结构化数据：分类→人映射、模板内容、关键字词典</div>
+      <div class="resp-who">👤 产品 直接改表</div>
+    </div>
+    <div class="resp-card r-skill">
+      <div class="resp-icon">🧩</div>
+      <div class="resp-title">9 个原子 Skill</div>
+      <div class="resp-desc">标准化能力实现：建群、查知识、写表、推送...</div>
+      <div class="resp-who">👨‍💻 开发同学</div>
+    </div>
+  </div>
+
+  <p><strong>判断归属的简单规则</strong>：</p>
+  <ul>
+    <li>文字描述的"规则、流程"？→ <strong>系统 Prompt</strong></li>
+    <li>表格化的"规则、映射、清单"？→ <strong>多维表</strong></li>
+    <li>"如何执行"？→ <strong>原子 Skill</strong></li>
+  </ul>
+</section>
+
+<!-- ============ Section 2 ============ -->
+<section id="sec-2">
+  <h2><span class="section-num">2</span>平台<span class="em">总体架构</span></h2>
+  <p>平台分为三层：垂类 Agent 层 → 共性 Skill 层 → 基础能力层。</p>
+
+  <div class="arch-diagram">
+    <div class="arch-layer layer-1">
+      <div class="layer-label">🎯 垂类 Agent 层</div>
+      <div class="layer-items">
+        <div class="layer-item">群运维 Agent</div>
+        <div class="layer-item">评审 Agent</div>
+        <div class="layer-item">体验官 Agent</div>
+        <div class="layer-item">未来场景...</div>
+      </div>
+      <div class="layer-foot">每个 Agent = 系统 Prompt + 多维表配置（由产品维护，描述本场景的规则与参数）</div>
+    </div>
+    <div class="arch-arrow">⬇</div>
+    <div class="arch-layer layer-2">
+      <div class="layer-label">🧩 平台共性 Skill 层（9 大 Skill）</div>
+      <div class="skill-category-row">
+        <div class="skill-category-box cat-a">
+          <div class="cat-title">A. 群协作</div>
+          <div class="cat-list">
+            <div class="skill-item"><span class="id-tag">A1</span> 群运维</div>
+            <div class="skill-item"><span class="id-tag">A2</span> 私聊确认</div>
+            <div class="skill-item"><span class="id-tag">A3</span> 内部群审核</div>
+          </div>
+        </div>
+        <div class="skill-category-box cat-b">
+          <div class="cat-title">B. 知识 / 数据</div>
+          <div class="cat-list">
+            <div class="skill-item"><span class="id-tag">B1</span> 知识库读写</div>
+            <div class="skill-item"><span class="id-tag">B2</span> 多维表读写</div>
+            <div class="skill-item"><span class="id-tag">B3</span> 内容识别抽取</div>
+          </div>
+        </div>
+        <div class="skill-category-box cat-c">
+          <div class="cat-title">C. 调度与触达</div>
+          <div class="cat-list">
+            <div class="skill-item"><span class="id-tag">C1</span> 定时调度</div>
+            <div class="skill-item"><span class="id-tag">C2</span> Agent 协同</div>
+            <div class="skill-item"><span class="id-tag">C3</span> 模板化输出</div>
+          </div>
+        </div>
+      </div>
+      <div class="layer-foot">由开发标准化封装，所有 Agent 共用</div>
+    </div>
+    <div class="arch-arrow">⬇</div>
+    <div class="arch-layer layer-3">
+      <div class="layer-label">⚙️ 基础能力层</div>
+      <div class="base-grid">
+        <div class="base-item">POPO IM</div>
+        <div class="base-item">POPO 多维表</div>
+        <div class="base-item">Echo / KM</div>
+        <div class="base-item">数据库接口</div>
+        <div class="base-item">POPO 文档</div>
+        <div class="base-item">POPO 日历</div>
+        <div class="base-item">定时调度</div>
+        <div class="base-item">Fabric 工具网关</div>
+      </div>
+    </div>
+  </div>
+
+  <p><strong>说明</strong>：</p>
+  <ul>
+    <li>垂类 Agent 不是代码，而是维护的一份"系统 Prompt + 多维表配置"</li>
+    <li>共性 Skill 由开发实现，所有 Agent 共用同一套，不为某个场景定制</li>
+    <li>新场景接入路径：写一份系统 Prompt + 配置多维表 + 选用所需 Skill；如遇全新能力则新增 Skill</li>
+  </ul>
+</section>
+
+<!-- ============ Section 3 ============ -->
+<section id="sec-3">
+  <h2><span class="section-num">3</span>平台共性能力（<span class="em">9 大 Skill</span>）</h2>
+
+  <h3>A. 群协作 <span class="badge badge-A">A 类 · 3 项</span></h3>
+  <div class="skills-grid">
+    <div class="skill-card cat-a">
+      <span class="skill-tag">A1 · 群协作</span>
+      <div class="skill-name">群运维</div>
+      <div class="skill-desc">建群 / 拉人 / 改群名 / 解散群 / 群成员管理。任何"一事一群"的场景都用它。</div>
+      <div class="skill-scenes"><b>典型复用</b>评审一需求一群、体验官一招募一群、未来策划评审群</div>
+    </div>
+    <div class="skill-card cat-a">
+      <span class="skill-tag">A2 · 群协作</span>
+      <div class="skill-name">私聊确认</div>
+      <div class="skill-desc">给指定用户私聊推送内容 → 等待回复 → 处理决策（确认 / 拒绝 / 修改）。</div>
+      <div class="skill-scenes"><b>典型复用</b>评审定时私聊产品、体验官私聊确认进群、群运维私聊更新知识</div>
+    </div>
+    <div class="skill-card cat-a">
+      <span class="skill-tag">A3 · 群协作</span>
+      <div class="skill-name">内部群审核闭环</div>
+      <div class="skill-desc">AI 产出内容 → 推送到内部群 → 多人逐一确认 → 通过 / 拒绝 / 修改 → 落地。</div>
+      <div class="skill-scenes"><b>典型复用</b>群运维知识沉淀、评审意见汇总、反馈分类确认</div>
+    </div>
+  </div>
+
+  <h3>B. 知识 / 数据 <span class="badge badge-B">B 类 · 3 项</span></h3>
+  <div class="skills-grid">
+    <div class="skill-card cat-b">
+      <span class="skill-tag">B1 · 知识/数据</span>
+      <div class="skill-name">知识库读写</div>
+      <div class="skill-desc">跨知识源（Echo / KM / 代码库 / POPO 文档）的统一读写接口。</div>
+      <div class="skill-scenes"><b>典型复用</b>所有"知识检索 + 改写回复"或"知识沉淀"的场景</div>
+    </div>
+    <div class="skill-card cat-b">
+      <span class="skill-tag">B2 · 知识/数据</span>
+      <div class="skill-name">多维表读写</div>
+      <div class="skill-desc">标准化的多维表 CRUD + 状态流转能力。同时承担"读取产品配置的多维表参数"。</div>
+      <div class="skill-scenes"><b>典型复用</b>群运维工单表、评审意见表、体验官反馈表</div>
+    </div>
+    <div class="skill-card cat-b">
+      <span class="skill-tag">B3 · 知识/数据</span>
+      <div class="skill-name">内容识别抽取</div>
+      <div class="skill-desc">从一段文本中识别出"有价值的结构化内容"。</div>
+      <div class="skill-scenes"><b>典型复用</b>识别提问意图、识别评审意见、识别 Bug/卡点/需求</div>
+    </div>
+  </div>
+  <blockquote class="warn">
+    ⚠️ <strong>关键</strong>：B1 解决"租户下知识库不支持隔离"的痛点，本 Skill 提供逻辑隔离（按命名空间区分），消除"读跨场景知识"的风险。
+  </blockquote>
+
+  <h3>C. 调度与触达 <span class="badge badge-C">C 类 · 3 项</span></h3>
+  <div class="skills-grid">
+    <div class="skill-card cat-c">
+      <span class="skill-tag">C1 · 调度</span>
+      <div class="skill-name">定时调度</div>
+      <div class="skill-desc">跨场景的定时任务能力（每日 / 每周 / 自定义 cron）。</div>
+      <div class="skill-scenes"><b>典型复用</b>群运维日报、评审定时确认、体验官每晚整理</div>
+    </div>
+    <div class="skill-card cat-c">
+      <span class="skill-tag">C2 · 调度</span>
+      <div class="skill-name">Agent 协同</div>
+      <div class="skill-desc">Agent 之间的消息流转 / 任务移交。</div>
+      <div class="skill-scenes"><b>典型复用</b>评审 → 开发交付 Spec、体验 → 评审反馈新需求</div>
+    </div>
+    <div class="skill-card cat-c">
+      <span class="skill-tag">C3 · 调度</span>
+      <div class="skill-name">模板化输出</div>
+      <div class="skill-desc">标准化的输出格式（卡片 / 日报 / 候选知识 / 等）模板。</div>
+      <div class="skill-scenes"><b>典型复用</b>所有标准化输出（替代原"多维表字段、回复格式、智能分类映射"等专属配置）</div>
+    </div>
+  </div>
+
+  <blockquote class="tip">
+    💡 <strong>关键设计</strong>："多维表字段、回复格式、智能分类映射、能力依赖表"等内容均被抽象为 <strong>C3 模板化能力的实例</strong>。每个垂类 Agent 通过 Prompt 引用模板 + 在多维表填写模板内容即可，无需重复定义专属字段。
+  </blockquote>
+</section>
+
+<!-- ============ Section 4 ============ -->
+<section id="sec-4">
+  <h2><span class="section-num">4</span>多 Agent <span class="em">协同关系</span></h2>
+  <p>4 个 Agent 不是孤立的，而是通过 <strong>C2 Agent 协同 Skill</strong> 互通消息：</p>
+
+  <div class="agent-flow-diagram">
+    <!-- 触发 -->
+    <div class="flow-center">
+      <div class="flow-trigger">📋 产品需求触发</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+
+    <!-- 评审 → 开发（同行，左右） -->
+    <div class="flow-pair">
+      <div class="agent-node-card">
+        <div class="ac-head">
+          <span class="ac-emoji">🤖</span>
+          <span class="ac-title">评审 Agent</span>
+        </div>
+        <ul class="ac-actions">
+          <li>群内记录评审意见</li>
+          <li>私聊确认</li>
+          <li>生成 Spec</li>
+        </ul>
+      </div>
+      <div class="pair-arrow">
+        →
+        <span class="pa-label">Spec</span>
+      </div>
+      <div class="agent-node-card placeholder">
+        <div class="ac-head">
+          <span class="ac-emoji">💻</span>
+          <span class="ac-title">开发 Agent</span>
+        </div>
+        <ul class="ac-actions">
+          <li>（后续接入）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 反馈新需求（向上箭头） -->
+    <div class="flow-arrow">
+      ↑ <span class="label-text">反馈新需求</span>
+    </div>
+
+    <!-- 体验官 Agent -->
+    <div class="flow-center">
+      <div class="agent-node-card" style="display:inline-block; text-align:left; min-width:280px;">
+        <div class="ac-head">
+          <span class="ac-emoji">📣</span>
+          <span class="ac-title">体验官 Agent</span>
+        </div>
+        <ul class="ac-actions">
+          <li>招募 / 拉群</li>
+          <li>识别有价值反馈</li>
+          <li>每晚整理</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 反馈表互通（向上箭头） -->
+    <div class="flow-arrow">
+      ↑ <span class="label-text">反馈表互通</span>
+    </div>
+
+    <!-- 群运维 Agent -->
+    <div class="flow-center">
+      <div class="agent-node-card" style="display:inline-block; text-align:left; min-width:280px;">
+        <div class="ac-head">
+          <span class="ac-emoji">🛠️</span>
+          <span class="ac-title">群运维 Agent</span>
+        </div>
+        <ul class="ac-actions">
+          <li>答疑 / 建单</li>
+          <li>知识沉淀</li>
+          <li>日报</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p><strong>核心机制说明</strong>：</p>
+  <ul>
+    <li>4 个 Agent 不是孤立的，通过 C2 Agent 协同 Skill 互通消息</li>
+    <li>每个 Agent 只关注自己的业务流程，跨 Agent 协同走 Skill 调用</li>
+    <li>例如：体验官识别到"用户报了 Bug" → 通过 C2 把消息推给评审 Agent → 评审 Agent 自动评估是否要进需求池</li>
+  </ul>
+</section>
+
+<!-- ============ Section 5 ============ -->
+<section id="sec-5">
+  <h2><span class="section-num">5</span>垂类 Agent <span class="em">配置范式</span></h2>
+  <p>每个 Agent = <strong>一份系统 Prompt + 一套多维表配置</strong>。下面以两个 Agent 为例展示。</p>
+
+  <!-- ===== 群运维 Agent ===== -->
+  <div class="agent-spec">
+    <div class="agent-header">
+      <div class="agent-icon">🛠️</div>
+      <div class="agent-title">
+        <div class="name">5.1 群运维 Agent</div>
+        <div class="id">适用场景：POPO CLI 互助交流群 / 龙虾用户群 等用户反馈群</div>
+      </div>
+    </div>
+
+    <div class="spec-section">
+      <span class="spec-label">▌ 触发规则</span>
+      <table>
+        <thead><tr><th>配置项</th><th>内容</th><th>配置位置</th></tr></thead>
+        <tbody>
+          <tr><td>触发方式</td><td>用户在群里 @机器人 提问（V1）/ 主动监听群内消息（V2）</td><td>系统 Prompt</td></tr>
+          <tr><td>监听范围</td><td>POPO CLI 互助交流群</td><td>系统 Prompt</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spec-section">
+      <span class="spec-label">▌ 引用的共性 Skill</span>
+      <table class="skill-usage-table">
+        <thead><tr><th>Skill</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-A">A3</span> 内部群审核闭环</td><td>候选知识送审</td></tr>
+          <tr><td><span class="badge badge-B">B1</span> 知识库读写</td><td>检索 + 沉淀知识</td></tr>
+          <tr><td><span class="badge badge-B">B2</span> 多维表读写</td><td>工单跟进表 + 读取配置参数</td></tr>
+          <tr><td><span class="badge badge-B">B3</span> 内容识别抽取</td><td>识别提问意图</td></tr>
+          <tr><td><span class="badge badge-C">C1</span> 定时调度</td><td>每日 18:00 日报</td></tr>
+          <tr><td><span class="badge badge-C">C3</span> 模板化输出</td><td>回复 / 工单 / 日报 模板</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spec-section">
+      <span class="spec-label">▌ 系统 Prompt 内容（描述"做什么、怎么判断"）</span>
+      <pre>你是 POPO CLI 群运维助手，负责在用户反馈群里答疑、建单、沉淀知识。
+
+<span class="k">【业务规则】</span>
+- 知识库范围：仅检索 popo-cli 命名空间，不读跨场景知识
+- 命中阈值：检索置信度 ≥ 0.75 才自动答复，否则建单
+- 输出风格：回复简洁专业
+
+<span class="k">【流程编排】</span>
+<span class="num-circle">①</span> 收到 @机器人 消息 <span class="arrow">→</span> 用 B3 识别意图（提问 / 闲聊 / 反馈）
+<span class="num-circle">②</span> 提问意图 <span class="arrow">→</span> 用 B1 在 popo-cli 知识库检索
+<span class="num-circle">③</span> 命中且阈值达标 <span class="arrow">→</span> 用 C3 渲染回复模板 <span class="arrow">→</span> 群内回复用户
+<span class="num-circle">④</span> 未命中 <span class="arrow">→</span> 用 B2 创建工单 + 读多维表分类映射 <span class="arrow">→</span> 自动指派处理人
+<span class="num-circle">⑤</span> 工单状态变为「已解决」<span class="arrow">→</span> 用 A3 推送候选知识到内部运维群
+<span class="num-circle">⑥</span> 运维确认后 <span class="arrow">→</span> B1 写入知识库 + B2 标记「已沉淀」
+<span class="num-circle">⑦</span> 每天 18:00 由 C1 触发 <span class="arrow">→</span> C3 渲染日报 <span class="arrow">→</span> 推送内部群
+
+<span class="k">【人工兜底】</span>
+- 用户回复「转人工」时，直接走步骤④
+- 同一用户连续 2 次表达不满意时，自动走步骤④</pre>
+    </div>
+
+    <div class="spec-section">
+      <span class="spec-label">▌ 多维表配置（存放结构化参数）</span>
+      <table>
+        <thead><tr><th>配置类型</th><th style="width:25%">表名</th><th>内容示例</th></tr></thead>
+        <tbody>
+          <tr><td>分类→人映射</td><td>群运维-分类映射表</td><td>安装→CLI 主开发；登录→吴松；IM→IM 维护者；文档→澈屿；多维表→澈屿；日程→张羽飞；兜底→值班 PM</td></tr>
+          <tr><td>关键字词典</td><td>群运维-关键字词典</td><td>"安装/Node/Ubuntu/SyntaxError" → 安装类；"登录/OIDC/token" → 登录类</td></tr>
+          <tr><td>回复模板</td><td>群运维-模板库</td><td><code>ops_reply_v1</code>：🤖 @{user} 看这边：{answer}<br>📖 来源：{kb_source}</td></tr>
+          <tr><td>日报模板</td><td>群运维-模板库</td><td><code>ops_daily_v1</code>（含 自动回答 / 工单处理 / 知识库 / 需关注 四块）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== 评审 Agent ===== -->
+  <div class="agent-spec">
+    <div class="agent-header">
+      <div class="agent-icon">🤖</div>
+      <div class="agent-title">
+        <div class="name">5.2 评审 Agent</div>
+        <div class="id">适用场景：需求评审阶段，一需求一群</div>
+      </div>
+    </div>
+
+    <div class="spec-section">
+      <span class="spec-label">▌ 触发规则</span>
+      <table>
+        <thead><tr><th>配置项</th><th>内容</th><th>配置位置</th></tr></thead>
+        <tbody>
+          <tr><td>触发方式</td><td>需求评审时</td><td>系统 Prompt</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spec-section">
+      <span class="spec-label">▌ 引用的共性 Skill</span>
+      <table class="skill-usage-table">
+        <thead><tr><th>Skill</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-A">A1</span> 群运维</td><td>一需求一群</td></tr>
+          <tr><td><span class="badge badge-A">A2</span> 私聊确认</td><td>定时私聊产品同学确认意见</td></tr>
+          <tr><td><span class="badge badge-A">A3</span> 内部群审核闭环</td><td>评审意见汇总送审</td></tr>
+          <tr><td><span class="badge badge-B">B1</span> 知识库读写</td><td>调用代码库 + UX 组件库</td></tr>
+          <tr><td><span class="badge badge-B">B2</span> 多维表读写</td><td>评审意见表 + 读取配置参数</td></tr>
+          <tr><td><span class="badge badge-B">B3</span> 内容识别抽取</td><td>识别评审意见 / 待澄清问题</td></tr>
+          <tr><td><span class="badge badge-C">C1</span> 定时调度</td><td>每天 17:00 私聊确认</td></tr>
+          <tr><td><span class="badge badge-C">C2</span> Agent 协同</td><td>Spec 完成后交付给开发 Agent</td></tr>
+          <tr><td><span class="badge badge-C">C3</span> 模板化输出</td><td>Spec / 待澄清问题 模板</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spec-section">
+      <span class="spec-label">▌ 系统 Prompt 内容（节选示意）</span>
+      <pre>你是需求评审助手，负责一需求一群的评审过程管理。
+
+<span class="k">【业务规则】</span>
+- 知识库范围：code-repo + ux-component-lib
+- 评审意见识别标准：包含建议 / 修改 / 异议等关键词的明确表态
+- Spec 生成模板：使用 spec 模板
+
+<span class="k">【流程编排】</span>
+<span class="num-circle">①</span> 需求创建 <span class="arrow">→</span> 用 A1 自动建群 + 拉团队成员
+<span class="num-circle">②</span> 用 B3 持续监听群消息，识别"评审意见"和"反馈"
+<span class="num-circle">③</span> 识别到的意见 <span class="arrow">→</span> B2 写入「评审意见表」
+<span class="num-circle">④</span> 每天 17:00 由 C1 触发 <span class="arrow">→</span> 用 A2 私聊产品同学逐一确认
+<span class="num-circle">⑤</span> 全部确认完成 <span class="arrow">→</span> B3 识别「待澄清问题」<span class="arrow">→</span> 群内发送给团队
+<span class="num-circle">⑥</span> 团队澄清后 <span class="arrow">→</span> B1 调用代码库 + UX 组件库知识 <span class="arrow">→</span> 生成 Spec
+<span class="num-circle">⑦</span> Spec 完成 <span class="arrow">→</span> C2 协同移交给开发 Agent</pre>
+    </div>
+
+    <div class="spec-section">
+      <span class="spec-label">▌ 多维表配置（节选）</span>
+      <table>
+        <thead><tr><th>配置类型</th><th style="width:25%">表名</th><th>内容示例</th></tr></thead>
+        <tbody>
+          <tr><td>评审意见识别词典</td><td>评审-意见关键字</td><td>"建议 / 修改 / 异议 / 疑问 / 卡点"</td></tr>
+          <tr><td>Spec 模板</td><td>评审-模板库</td><td><code>spec_v1</code>（含 背景 / 目标 / 流程 / 接口 / 风险）</td></tr>
+          <tr><td>待澄清问题模板</td><td>评审-模板库</td><td><code>clarify_v1</code>（含 问题描述 / 期待答复人 / 截止时间）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <blockquote>
+    📌 <strong>核心观察</strong>：两个 Agent 引用的 Skill 90% 重叠，差异只在"系统 Prompt 描述的业务规则"和"多维表里填的参数"。这就是标准化的价值：<strong>新场景接入 = PM 写一份 Prompt + 填一套多维表参数</strong>。
+  </blockquote>
+</section>
+
+<!-- ============ Section 6 ============ -->
+<section id="sec-6">
+  <h2><span class="section-num">6</span>群运维场景：<span class="em">首个落地 Demo</span></h2>
+  <p>群运维 Agent 作为<strong>平台首个验证场景</strong>，验证 Skill 矩阵的可用性和复用性。</p>
+
+  <h3>6.1 触发方式</h3>
+  <table>
+    <thead><tr><th>阶段</th><th>模式</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>V1</td><td>@机器人 触发</td><td>可控、不打扰，验证准召率</td></tr>
+      <tr><td>V2</td><td>群内主动监听</td><td>V1 准召率达标后切换</td></tr>
+    </tbody>
+  </table>
+
+  <h3>6.2 用户体验流程</h3>
+  <div class="process-flow">
+    <div class="pf-step">用户在群里 @机器人："popo-cli 安装失败怎么办？"</div>
+    <div class="pf-step">Agent 立即基于知识库答复</div>
+    <div class="pf-step">用户继续追问"还是不行"，或点击"建单跟进"</div>
+    <div class="pf-step">Agent 判断答不准 → 触发建单 → 用户补充完整上下文 → 创建工单</div>
+    <div class="pf-step">按映射表指派给处理人 + 在多维表更新解决方案</div>
+    <div class="pf-step">24 小时内运维群收到候选知识卡片</div>
+    <div class="pf-step">运维点击「✅ 通过入库」 → Agent 自动写入 Echo + 标记工单"已沉淀"</div>
+  </div>
+
+  <h3>6.3 关键模板（C3 渲染、模板内容存于多维表）</h3>
+  <table>
+    <thead><tr><th>模板</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td><code>ops_reply_v1</code></td><td>群内自动回复</td></tr>
+      <tr><td><code>ops_kb_candidate_v1</code></td><td>候选知识审核卡片</td></tr>
+      <tr><td><code>ops_daily_v1</code></td><td>每日日报模板</td></tr>
+      <tr><td><code>ops_assignment_map_v1</code></td><td>分类 → 责任人映射</td></tr>
+    </tbody>
+  </table>
+
+  <h3>6.4 智能分类映射（多维表存储）</h3>
+  <table>
+    <thead><tr><th>分类</th><th>触发关键字</th><th>默认处理人</th></tr></thead>
+    <tbody>
+      <tr><td>安装 / 环境</td><td>安装、Node、Ubuntu、SyntaxError</td><td>CLI 主开发</td></tr>
+      <tr><td>登录 / 授权</td><td>登录、OIDC、token</td><td>吴松</td></tr>
+      <tr><td>IM Skill</td><td>发消息、@人员、卡片</td><td>IM Skill 维护者</td></tr>
+      <tr><td>云文档 / 表格</td><td>文档、单元格、md</td><td>澈屿(汪晓东)</td></tr>
+      <tr><td>多维表格</td><td>多维表、字段、记录、仪表盘</td><td>澈屿(汪晓东)</td></tr>
+      <tr><td>日程 / 会议室</td><td>日程、calendar</td><td>张羽飞</td></tr>
+      <tr><td>限流 / 性能</td><td>限流、卡、慢</td><td>刘亚威</td></tr>
+      <tr><td>兜底</td><td>—</td><td>值班 PM</td></tr>
+    </tbody>
+  </table>
+  <blockquote class="tip">
+    此表由 PM 直接维护，无需改代码。Agent 通过 B2 实时读取。
+  </blockquote>
+</section>
+
+<!-- ============ Section 7 ============ -->
+<section id="sec-7">
+  <h2><span class="section-num">7</span>评审 Agent <span class="em">落地示意</span></h2>
+  <p>评审 Agent 复用 9 个共性 Skill，差异仅在 Prompt 和多维表参数。其复用率约 <strong>90%</strong>。</p>
+
+  <div class="process-flow">
+    <div class="pf-step">需求创建（产品同学触发）→ A1 自动建群 + 拉团队成员</div>
+    <div class="pf-step">B3 监听群消息，识别"评审意见"和"反馈"</div>
+    <div class="pf-step">B2 写入评审意见表（多维表）</div>
+    <div class="pf-step">每天 17:00 C1 定时触发 → A2 私聊产品同学逐一确认</div>
+    <div class="pf-step">全部确认完成 → B3 识别"待澄清问题"</div>
+    <div class="pf-step">群内发送澄清问题 → 团队成员澄清</div>
+    <div class="pf-step">B1 调用代码库 + UX 组件库知识，辅助生成 Spec</div>
+    <div class="pf-step">C2 推送 Spec → 开发 Agent（后续接入）</div>
+  </div>
+</section>
+
+<!-- ============ Section 8 ============ -->
+<section id="sec-8">
+  <h2><span class="section-num">8</span>体验官 Agent <span class="em">落地示意</span></h2>
+  <p>体验官 Agent 复用率约 <strong>85%</strong>。</p>
+
+  <div class="process-flow">
+    <div class="pf-step">产品提交体验招募需求 → A1 自动拉群 + A2 私聊招募 → 用户确认 → 进群</div>
+    <div class="pf-step">B3 监听群内反馈，识别 [Bug / 体验卡点 / 新需求]</div>
+    <div class="pf-step">B2 写入反馈表</div>
+    <div class="pf-step">每晚 C1 定时触发 → 整理 → C3 渲染日报 → 推送需求产研群</div>
+    <div class="pf-step">新需求或变更 → C2 通知评审 Agent 评估</div>
+  </div>
+</section>
+
+<footer>
+  AI Native 协作方案 · 共性 Skill + 垂类 Prompt + 多维表配置
+</footer>
+</div>
+</body>
+</html>
