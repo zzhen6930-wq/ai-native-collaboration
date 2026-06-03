@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>POPO CLI 小需求合集 PRD</title>
+<style>
+  :root {
+    --primary: #2563EB;
+    --primary-deep: #1E40AF;
+    --primary-light: #DBEAFE;
+    --green: #10B981;
+    --green-light: #D1FAE5;
+    --orange: #F97316;
+    --orange-light: #FED7AA;
+    --purple: #8B5CF6;
+    --purple-light: #EDE9FE;
+    --ink: #0F172A;
+    --ink-2: #1E293B;
+    --grey: #64748B;
+    --grey-light: #F1F5F9;
+    --bg: #F8FAFC;
+    --border: #E2E8F0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .container {
+    max-width: 880px;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+  }
+
+  /* Header */
+  .doc-header {
+    padding: 48px 48px 40px;
+    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #8B5CF6 100%);
+    color: #fff;
+  }
+  .doc-header .label {
+    display: inline-block;
+    background: rgba(255,255,255,.18);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+  }
+  .doc-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .doc-header .subtitle {
+    font-size: 15px;
+    opacity: .9;
+  }
+
+  /* Meta info */
+  .meta-info {
+    background: var(--grey-light);
+    padding: 16px 48px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .meta-info span { color: var(--grey); }
+  .meta-info b { color: var(--ink); margin-left: 6px; }
+
+  /* Sections */
+  section {
+    padding: 40px 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 16px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--ink-2);
+    margin-top: 18px;
+    margin-bottom: 8px;
+  }
+
+  p, ul li {
+    color: var(--ink-2);
+    margin-bottom: 6px;
+  }
+  ul { padding-left: 24px; margin-bottom: 12px; }
+
+  .req-card {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 18px;
+    transition: border-color 0.2s;
+  }
+  .req-card.r1 { border-left: 4px solid var(--green); }
+  .req-card.r2 { border-left: 4px solid var(--primary); }
+  .req-card.r3 { border-left: 4px solid var(--purple); }
+
+  .req-card .req-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .req-card .req-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .req-card.r1 .req-tag { background: var(--green-light); color: #065F46; }
+  .req-card.r2 .req-tag { background: var(--primary-light); color: var(--primary-deep); }
+  .req-card.r3 .req-tag { background: var(--purple-light); color: #5B21B6; }
+
+  .info-block {
+    background: var(--grey-light);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 12px;
+  }
+  .info-block .info-label {
+    font-size: 12px;
+    color: var(--grey);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .info-block ul { padding-left: 20px; margin: 0; }
+  .info-block li { font-size: 14px; }
+  .info-block code {
+    background: #fff;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 13px;
+    color: var(--primary-deep);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  th {
+    background: var(--grey-light);
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 700;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  tr:last-child td { border-bottom: none; }
+
+  footer {
+    background: var(--ink);
+    color: var(--grey);
+    text-align: center;
+    padding: 18px;
+    font-size: 12px;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .container { box-shadow: none; }
+    section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="doc-header">
+    <span class="label">PRD · 小需求合集</span>
+    <h1>POPO CLI 小需求合集</h1>
+    <p class="subtitle">3 个用户视角的能力补全</p>
+  </div>
+
+  <div class="meta-info">
+    <span>文档版本：<b>V1.0</b></span>
+    <span>作者：<b>青远(张振)</b></span>
+    <span>创建日期：<b>2026-06-03</b></span>
+    <span>状态：<b>待评审</b></span>
+  </div>
+
+  <section>
+    <h2>背景</h2>
+    <p>本期收集了 3 个 POPO CLI 用户反馈的小需求，聚焦在「让更多用户能用上 CLI」和「让 IM Skill 能力更完整」两个方向。</p>
+  </section>
+
+  <section>
+    <h2><span class="num">1</span>需求清单</h2>
+
+    <div class="req-card r1">
+      <span class="req-tag">需求 1 · 账号扩展</span>
+      <div class="req-title">支持 grp 账号使用 CLI</div>
+      <p>当前 POPO CLI 仅支持员工账号登录使用，部分场景需要使用 grp 账号（如团队公共账号、机器人账号等），希望能扩展支持。</p>
+
+      <h3>需求范围</h3>
+      <div class="info-block">
+        <ul>
+          <li>支持使用 grp 账号完成 CLI 的<strong>首次登录 + 授权</strong></li>
+          <li>支持 grp 账号<strong>授权失效后</strong>收到授权卡片重新授权</li>
+          <li>授权流程与员工账号<strong>保持一致</strong>，无特殊处理逻辑</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="req-card r2">
+      <span class="req-tag">需求 2 · IM 能力补全</span>
+      <div class="req-title">IM Skill 支持给机器人发消息</div>
+      <p>当前 IM Skill 已支持给"人"发消息，但不支持给"机器人"发消息。用户希望通过同一个 Skill 完成两种发送，避免 AI 模型在多个 Skill 间来回选择，提升响应速度。</p>
+
+      <h3>需求范围</h3>
+      <div class="info-block">
+        <ul>
+          <li>IM Skill <strong>同时支持</strong>给「人」和给「机器人」发消息</li>
+          <li>两种发送方式的<strong>使用方法都写在同一个 Skill 文档里</strong>，让 AI 一次拿到完整调用方式</li>
+          <li><strong>减少 Skill 内部的多次工具调用</strong>：希望 AI 直接调用一次完成发送，不要在中间串联调用多个工具 / 方法</li>
+        </ul>
+      </div>
+
+      <h3>用户体验示例</h3>
+      <div class="info-block">
+        <div class="info-label">用户指令</div>
+        <p style="margin: 4px 0 0;">"帮我把这条消息发给 KM 小助手机器人，让它帮我搜一下相关知识"</p>
+        <div class="info-label" style="margin-top: 10px;">期望结果</div>
+        <p style="margin: 4px 0 0;">AI 调用 IM Skill <strong>一次完成发送</strong>，中间不需要串联调用多个工具 / 方法（参考现状：写文档时虽然只用 Doc Skill，但中间会调多个工具接口，希望本需求不出现类似情况）</p>
+      </div>
+    </div>
+
+    <div class="req-card r3">
+      <span class="req-tag">需求 3 · IM 能力补全</span>
+      <div class="req-title">IM Skill 支持查询群公告、群成员</div>
+      <p>当前 IM Skill 没有提供群相关的查询能力。用户在群运营、群分析等场景下需要查看群公告和群成员信息，希望能补上这两个能力。</p>
+
+      <h3>需求范围</h3>
+      <div class="info-block">
+        <div class="info-label">📢 群公告</div>
+        <ul>
+          <li>✅ 支持<strong>查询</strong>群公告内容</li>
+          <li>❌ <strong>不支持编辑</strong>群公告（本期不做）</li>
+        </ul>
+
+        <div class="info-label" style="margin-top: 12px;">👥 群成员</div>
+        <ul>
+          <li>✅ 支持查询群组中的所有成员列表</li>
+          <li>每个成员需返回：<strong>姓名、邮箱、名片上的组织</strong></li>
+        </ul>
+      </div>
+
+      <h3>查询字段示例</h3>
+      <table>
+        <thead>
+          <tr><th>字段</th><th>示例</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>姓名</td><td>张振</td></tr>
+          <tr><td>邮箱</td><td>zhangzhen19@corp.netease.com</td></tr>
+          <tr><td>名片上的组织</td><td>效率工程部-云协作产品中心-AI工具组</td></tr>
+        </tbody>
+      </table>
+
+      <h3>用户体验示例</h3>
+      <div class="info-block">
+        <div class="info-label">用户指令</div>
+        <p style="margin: 4px 0 0;">"看一下「POPO CLI 互助交流群」里都有哪些人，按部门分组列一下"</p>
+        <div class="info-label" style="margin-top: 10px;">期望结果</div>
+        <p style="margin: 4px 0 0;">AI 调用 IM Skill 拉取群成员列表，按"组织"字段分组展示</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>需求总览</h2>
+    <table>
+      <thead>
+        <tr><th style="width:8%">#</th><th style="width:32%">需求</th><th>核心价值</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>支持 grp 账号使用 CLI</td>
+          <td>覆盖团队公共账号 / 机器人账号场景，扩大 CLI 用户覆盖面</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>IM Skill 支持给机器人发消息</td>
+          <td>统一发送入口，减少 AI 调用绕路，提升响应速度</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>IM Skill 支持查询群公告、群成员</td>
+          <td>补全群信息查询能力，支撑群运营 / 分析等场景</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+<footer>POPO CLI 小需求合集 PRD V1.0 · 2026-06-03</footer>
+</body>
+</html>
