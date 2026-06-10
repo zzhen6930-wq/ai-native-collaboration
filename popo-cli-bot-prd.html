@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>POPO CLI · 机器人能力 PRD</title>
+<style>
+  :root {
+    --primary: #2563EB;
+    --primary-deep: #1E40AF;
+    --primary-light: #DBEAFE;
+    --green: #10B981;
+    --green-light: #D1FAE5;
+    --orange: #F97316;
+    --orange-light: #FED7AA;
+    --purple: #8B5CF6;
+    --purple-light: #EDE9FE;
+    --pink: #EC4899;
+    --pink-light: #FCE7F3;
+    --teal: #14B8A6;
+    --teal-light: #CCFBF1;
+    --red: #EF4444;
+    --red-light: #FEE2E2;
+    --ink: #0F172A;
+    --ink-2: #1E293B;
+    --grey: #64748B;
+    --grey-light: #F1F5F9;
+    --bg: #F8FAFC;
+    --border: #E2E8F0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .container {
+    max-width: 940px;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+  }
+
+  /* ======== Header ======== */
+  .doc-header {
+    padding: 56px 48px 44px;
+    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #8B5CF6 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 90% 20%, rgba(255,255,255,.12), transparent 35%),
+      radial-gradient(circle at 10% 80%, rgba(236, 72, 153, .15), transparent 40%);
+    pointer-events: none;
+  }
+  .doc-header .label {
+    position: relative;
+    display: inline-block;
+    background: rgba(255,255,255,.18);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+  }
+  .doc-header h1 {
+    position: relative;
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .doc-header .subtitle {
+    position: relative;
+    font-size: 15.5px;
+    opacity: .92;
+    max-width: 720px;
+  }
+
+  .meta-info {
+    background: var(--grey-light);
+    padding: 16px 48px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .meta-info span { color: var(--grey); }
+  .meta-info b { color: var(--ink); margin-left: 6px; }
+
+  /* ======== Sections ======== */
+  section {
+    padding: 44px 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  h2 {
+    font-size: 24px;
+    font-weight: 900;
+    margin-bottom: 18px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--ink);
+    margin-top: 24px;
+    margin-bottom: 10px;
+  }
+  h4 {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--ink-2);
+    margin-top: 14px;
+    margin-bottom: 6px;
+  }
+  p, ul li { color: var(--ink-2); margin-bottom: 6px; }
+  ul { padding-left: 22px; margin-bottom: 12px; }
+  strong { color: var(--ink); font-weight: 700; }
+
+  /* 概念卡 */
+  .concept-card {
+    background: linear-gradient(135deg, #EFF6FF, #F5F3FF);
+    border: 1px solid var(--primary-light);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 16px 0;
+  }
+  .concept-card .ck-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--primary-deep);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .concept-card p { margin: 0; color: var(--ink-2); }
+
+  /* 场景卡 */
+  .scene-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .scene-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .scene-card.s1 { border-left: 3px solid var(--green); }
+  .scene-card.s2 { border-left: 3px solid var(--primary); }
+  .scene-card.s3 { border-left: 3px solid var(--purple); }
+  .scene-card.s4 { border-left: 3px solid var(--orange); }
+  .scene-card .sc-tag {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .scene-card.s1 .sc-tag { background: var(--green-light); color: #065F46; }
+  .scene-card.s2 .sc-tag { background: var(--primary-light); color: var(--primary-deep); }
+  .scene-card.s3 .sc-tag { background: var(--purple-light); color: #5B21B6; }
+  .scene-card.s4 .sc-tag { background: var(--orange-light); color: #9A3412; }
+  .scene-card .sc-title {
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .scene-card .sc-desc {
+    font-size: 13.5px;
+    color: var(--grey);
+    line-height: 1.6;
+  }
+
+  /* Flow Step */
+  .flow-step {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .flow-step .fs-num {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 15px;
+  }
+  .flow-step .fs-name {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+  .flow-step .fs-desc {
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+  .flow-step .fs-desc code {
+    background: var(--grey-light);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 12.5px;
+    color: var(--primary-deep);
+  }
+
+  /* Demo chat */
+  .demo-chat {
+    background: #FAFBFC;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    margin: 14px 0;
+  }
+  .demo-chat .chat-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+    font-size: 13.5px;
+  }
+  .demo-chat .chat-role {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 9px;
+    border-radius: 6px;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+  .demo-chat .chat-row.user .chat-role { background: #E0F2FE; color: #0369A1; }
+  .demo-chat .chat-row.agent .chat-role { background: var(--ink); color: #fff; }
+  .demo-chat .chat-row.bot .chat-role { background: var(--orange-light); color: #9A3412; }
+  .demo-chat .chat-bubble {
+    flex: 1;
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border-radius: 10px;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .demo-chat .chat-row.agent .chat-bubble {
+    background: linear-gradient(135deg, #ECFDF5, #F0FDF4);
+    border-color: var(--green);
+  }
+
+  /* Info block */
+  .info-block {
+    background: var(--grey-light);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 12px;
+  }
+  .info-block .info-label {
+    font-size: 12px;
+    color: var(--grey);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .info-block ul { padding-left: 20px; margin: 0; }
+  .info-block li { font-size: 14px; }
+
+  /* 提示框 */
+  .callout {
+    border-left: 4px solid var(--primary);
+    background: var(--primary-light);
+    padding: 12px 16px;
+    margin: 14px 0;
+    border-radius: 0 8px 8px 0;
+    color: var(--primary-deep);
+    font-size: 13.5px;
+  }
+  .callout.tip {
+    border-color: var(--teal);
+    background: var(--teal-light);
+    color: #115E59;
+  }
+  .callout.warn {
+    border-color: var(--orange);
+    background: var(--orange-light);
+    color: #9A3412;
+  }
+  .callout strong { color: inherit; }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  th {
+    background: var(--grey-light);
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 700;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  /* 全链路图 */
+  .arch-flow {
+    background: #FAFBFC;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    margin: 16px 0;
+  }
+  .arch-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .arch-row:last-child { margin-bottom: 0; }
+  .arch-node {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-align: center;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+  .arch-node.user { border-color: var(--primary); background: var(--primary-light); color: var(--primary-deep); }
+  .arch-node.agent { border-color: var(--green); background: var(--green-light); color: #065F46; }
+  .arch-node.cli { border-color: var(--purple); background: var(--purple-light); color: #5B21B6; }
+  .arch-node.popo { border-color: var(--orange); background: var(--orange-light); color: #9A3412; }
+  .arch-node.bot { border-color: var(--pink); background: var(--pink-light); color: #9D174D; }
+  .arch-arrow {
+    text-align: center;
+    color: var(--grey);
+    font-weight: 900;
+    font-size: 16px;
+  }
+  .arch-flow .row-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--grey);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .arch-flow .row-label.in { color: var(--green); }
+  .arch-flow .row-label.out { color: var(--orange); }
+
+  /* 不在范围内 */
+  .out-scope-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .out-scope-item {
+    background: var(--grey-light);
+    border-radius: 10px;
+    padding: 12px 16px;
+    border-left: 3px solid var(--grey);
+  }
+  .out-scope-item .os-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--ink-2);
+    margin-bottom: 4px;
+  }
+  .out-scope-item .os-reason {
+    font-size: 12.5px;
+    color: var(--grey);
+    line-height: 1.55;
+  }
+
+  footer {
+    background: var(--ink);
+    color: var(--grey);
+    text-align: center;
+    padding: 18px;
+    font-size: 12px;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .container { box-shadow: none; }
+    section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ============ Header ============ -->
+  <div class="doc-header">
+    <span class="label">PRD · POPO 机器人能力</span>
+    <h1>通过 CLI 使用 POPO 机器人</h1>
+    <p class="subtitle">让 Agent 拥有自己的"身份"——以机器人身份发消息、接收用户回复，打通 AI 与人的双向沟通闭环</p>
+  </div>
+
+  <div class="meta-info">
+    <span>文档版本：<b>V1.0</b></span>
+    <span>作者：<b>青远(张振)</b></span>
+    <span>创建日期：<b>2026-06-10</b></span>
+    <span>状态：<b>待评审</b></span>
+  </div>
+
+  <!-- ============ 1 背景 ============ -->
+  <section>
+    <h2><span class="num">1</span>背景与价值</h2>
+
+    <h3>当前问题</h3>
+    <p>POPO CLI 当前只能用<strong>用户本人的身份</strong>发消息。这带来三个问题：</p>
+    <ul>
+      <li><strong>用户呼声</strong>：AI coding 背景下，越来越多用户使用自己的 Agent 处理工作，CLI 用户群内多位用户反馈<strong>需要支持连接机器人的能力</strong>。</li>
+      <li><strong>群内身份诉求</strong>：很多用户向群里发消息时<strong>希望使用机器人身份</strong>，而不是自己的身份，以免产生误会。</li>
+      <li><strong>单向沟通</strong>：用户能让 Agent 发消息，但<strong>对方回复的消息回不到 Agent</strong>，无法形成"AI ↔ 人"的对话闭环。</li>
+    </ul>
+
+    <h3>解决方案</h3>
+    <div class="concept-card">
+      <div class="ck-title">核心思路</div>
+      <p>让用户可以通过 CLI <strong>扫码创建一个专属的 POPO 机器人</strong>，作为自己 Agent 的"代言人"。Agent 通过这个机器人对外发消息，对方的回复也能通过<strong>长连接实时推回 Agent</strong>，形成完整的双向对话能力。</p>
+    </div>
+
+    <h3>用户价值</h3>
+    <ul>
+      <li>✅ <strong>满足用户呼声</strong>：补齐 CLI 用户群反馈最多的"机器人能力"，让自己的 Agent 真正能用。</li>
+      <li>✅ <strong>群内身份合规</strong>：用机器人身份发消息，避免被同事误以为是用户本人发言。</li>
+      <li>✅ <strong>双向闭环</strong>：用户可以"回复机器人 / 群内 @机器人" → Agent 实时收到 → 继续执行任务。</li>
+      <li>✅ <strong>低门槛</strong>：扫码一步创建，不需要去开发者后台手动配置。</li>
+    </ul>
+  </section>
+
+  <!-- ============ 2 典型场景 ============ -->
+  <section>
+    <h2><span class="num">2</span>典型场景</h2>
+
+    <div class="scene-grid">
+      <div class="scene-card s1">
+        <span class="sc-tag">场景 1 · 远程指挥（核心）</span>
+        <div class="sc-title">手机远程指挥电脑 Agent</div>
+        <p class="sc-desc">出差或在外，开发同学用手机指挥电脑上的 Agent 写代码。Agent 遇到需要确认的事项（如"是否覆盖现有文件？"），通过机器人在 POPO 给主人发消息，<strong>主人手机回复 "yes"</strong>，Agent 收到后继续执行。</p>
+      </div>
+
+      <div class="scene-card s2">
+        <span class="sc-tag">场景 2 · 主动通知</span>
+        <div class="sc-title">Agent 任务完成后主动播报</div>
+        <p class="sc-desc">长任务（部署、跑数据、生成报告）完成后，Agent 通过机器人推送一条"任务已完成"消息，附带结果链接，让用户不必盯着终端等待。</p>
+      </div>
+
+      <div class="scene-card s3">
+        <span class="sc-tag">场景 3 · 风险确认</span>
+        <div class="sc-title">高风险操作前的人工确认</div>
+        <p class="sc-desc">Agent 准备执行高风险动作（删数据、上线、改配置）前，先通过机器人发"确认是否执行 X？"，等待用户回复确认后再继续，避免误操作。</p>
+      </div>
+
+      <div class="scene-card s4">
+        <span class="sc-tag">场景 4 · 多 Agent 协作</span>
+        <div class="sc-title">多个 Agent 各自有独立机器人</div>
+        <p class="sc-desc">用户为不同 Agent（比如"代码助手"、"运维助手"、"日报助手"）各自绑定一个机器人，消息来源一目了然，不会串台。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3 整体能力图 ============ -->
+  <section>
+    <h2><span class="num">3</span>能力总览</h2>
+
+    <p>本期需要交付 <strong>3 个连贯的能力</strong>，共同构成"Agent 拥有专属机器人"的完整闭环：</p>
+
+    <div class="arch-flow">
+      <div class="row-label">① 一次性配置</div>
+      <div class="arch-row">
+        <div class="arch-node cli">终端指令</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node user">POPO 扫码</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node bot">创建机器人</div>
+      </div>
+
+      <div class="row-label out" style="margin-top: 12px;">② 发送消息（Agent 主动）</div>
+      <div class="arch-row">
+        <div class="arch-node agent">Agent</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node cli">CLI 调用</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node bot">机器人发消息</div>
+      </div>
+
+      <div class="row-label in" style="margin-top: 12px;">③ 接收回复（用户回机器人）</div>
+      <div class="arch-row">
+        <div class="arch-node user">用户回机器人</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node popo">POPO 长连接</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node agent">Agent 收到回调</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th style="width:10%">能力</th><th style="width:30%">名称</th><th>用户视角的价值</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>能力 1</strong></td>
+          <td>扫码创建专属机器人</td>
+          <td>一次扫码完成机器人创建与绑定，不用懂"app_id / app_secret / 开发者后台"等技术概念。</td>
+        </tr>
+        <tr>
+          <td><strong>能力 2</strong></td>
+          <td>Agent 通过机器人发消息</td>
+          <td>Agent 用机器人身份给指定用户/群发消息，发送方显示为"机器人"，与用户身份解耦。</td>
+        </tr>
+        <tr>
+          <td><strong>能力 3</strong></td>
+          <td>用户回复实时推送给 Agent</td>
+          <td>对方回复机器人的消息能实时推到 Agent，让 Agent 听得到"用户的反馈"，形成对话闭环。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ 4 能力一：创建机器人 ============ -->
+  <section>
+    <h2><span class="num">4</span>能力一 · 扫码创建机器人</h2>
+
+    <h3>核心逻辑</h3>
+    <ul>
+      <li>用户在终端内<strong>输入创建机器人的指令</strong>，终端展示<strong>一个二维码</strong>。</li>
+      <li>用户用 POPO 客户端扫码 → 跳转至 POPO 机器人创建页 → 输入名称 → 创建成功 → 自动跳转至机器人助手。</li>
+      <li>创建成功后，CLI 自动完成"机器人 ↔ 当前 Agent"的绑定，整个流程<strong>用户无感</strong>。</li>
+    </ul>
+
+    <div class="callout tip">
+      💡 <strong>体验对齐已有能力</strong>：扫码创建机器人的客户端流程<strong>复用 POPO 现有的"扫一扫创建机器人"能力</strong>（含名称、头像、可使用范围等设置），CLI 只负责"产出二维码"和"接收创建结果"。
+    </div>
+
+    <h3>客户端页面调整（不能完全复用，需 UX 出稿）</h3>
+    <table>
+      <thead>
+        <tr><th style="width:25%">调整项</th><th>原现状</th><th>本期要求</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>页面顶部文案</strong></td>
+          <td>"创建 OpenClaw 机器人"</td>
+          <td>改为"<strong>创建机器人</strong>"</td>
+        </tr>
+        <tr>
+          <td><strong>页面下方按钮</strong></td>
+          <td>同时有"创建"和"绑定已有"两个按钮</td>
+          <td><strong>去掉"绑定已有"按钮</strong>，只保留"创建"按钮</td>
+        </tr>
+        <tr>
+          <td><strong>创建过程中的页面图片</strong></td>
+          <td>展示龙虾形象</td>
+          <td><strong>替换图片，不展示龙虾</strong>，具体由 UX 出稿</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4 style="margin-top: 20px;">UX 视觉稿（设置 / 创建中 / 创建成功）</h4>
+    <figure style="margin: 12px 0 0; text-align: center;">
+      <img src="创建机器人.png" alt="创建机器人 UX 稿" style="max-width: 100%; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.08);" />
+      <figcaption style="font-size: 12px; color: var(--grey); margin-top: 8px;">扫码后客户端三态：① 设置（名称 + 头像 + 简介） → ② 创建中 → ③ 创建成功，点击"开启对话"进入机器人助手</figcaption>
+    </figure>
+
+    <h3>关键约束</h3>
+    <table>
+      <thead>
+        <tr><th style="width:25%">约束</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>只支持新建</strong></td>
+          <td>每次扫码都<strong>创建一个新机器人</strong>，不支持"绑定已有机器人"。原因：已有机器人可能已被绑给别的 Agent，重复绑定会导致回调消息错发。</td>
+        </tr>
+        <tr>
+          <td><strong>支持多机器人</strong></td>
+          <td>同一用户可以重复创建多个机器人，分别给不同 Agent / 不同任务用。Agent 调用时可<strong>对话式指定</strong>用哪个机器人（按机器人名称选择）。</td>
+        </tr>
+        <tr>
+          <td><strong>归属绑定</strong></td>
+          <td>机器人会绑定到<strong>扫码时所使用的 POPO 客户端用户</strong>名下（即"扫码人"为机器人创建者，而非 CLI 当前登录用户）。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>本期不做</h3>
+    <div class="out-scope-grid">
+      <div class="out-scope-item">
+        <div class="os-title">解绑 / 删除机器人</div>
+        <div class="os-reason">本期暂不通过 CLI 提供解绑能力，机器人创建后由用户在 POPO 客户端管理。</div>
+      </div>
+      <div class="out-scope-item">
+        <div class="os-title">CLI 内编辑机器人信息</div>
+        <div class="os-reason">机器人名称、头像、可使用范围等都在 POPO 客户端配置，CLI 不重复实现。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5 能力二：用机器人发消息 ============ -->
+  <section>
+    <h2><span class="num">5</span>能力二 · Agent 通过机器人发消息</h2>
+
+    <h3>用户体验</h3>
+    <p>使用方式与"<strong>当前 CLI 已有的发消息能力</strong>"完全对齐，用户不需要学习新命令、新参数。差异只有一点：<strong>发送身份</strong>从"用户本人"变成"机器人"。</p>
+
+    <div class="demo-chat">
+      <div class="chat-row user">
+        <span class="chat-role">用户</span>
+        <div class="chat-bubble">让我的"代码助手机器人"给王五发条消息：今天的代码已合并到主干，请关注。</div>
+      </div>
+      <div class="chat-row agent">
+        <span class="chat-role">AGENT</span>
+        <div class="chat-bubble">已通过机器人「代码助手」给王五发送消息 ✅</div>
+      </div>
+      <div class="chat-row bot">
+        <span class="chat-role">机器人</span>
+        <div class="chat-bubble">（在王五的 POPO 收件箱）<strong>代码助手机器人</strong>：今天的代码已合并到主干，请关注。</div>
+      </div>
+    </div>
+
+    <h3>需求范围</h3>
+    <div class="info-block">
+      <ul>
+        <li>机器人发消息的<strong>消息内容能力</strong>支持<strong>文本、图片、文件</strong>，与当前 CLI 已支持的发消息能力保持一致。</li>
+        <li>消息<strong>发送方</strong>显示为机器人名称与头像，<strong>不显示用户本人身份</strong>。</li>
+        <li>同一用户名下有多个机器人时，Agent 可通过<strong>机器人名称</strong>选择用哪个发送。</li>
+      </ul>
+    </div>
+
+    <h3>权限校验</h3>
+    <div class="info-block">
+      <div class="info-label">两道权限闸门</div>
+      <ul>
+        <li><strong>① 操作机器人的权限</strong>：只有<strong>本地登录 CLI 的用户</strong>本人能通过 CLI 操作自己创建的机器人，他人无法借用。</li>
+        <li><strong>② 机器人可使用范围（接收方）</strong>：与 POPO 已有的「<strong>机器人可使用范围</strong>」机制打通——机器人只能给"在其可使用范围内"的用户/群发消息，发到范围外会被拒绝。</li>
+      </ul>
+      <div class="info-label" style="margin-top: 10px;">不需要做的</div>
+      <ul>
+        <li>不需要单独设计"操作前二次确认"机制，登录态校验 + 范围校验已足够。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 6 能力三：消息回调 ============ -->
+  <section>
+    <h2><span class="num">6</span>能力三 · 用户回复实时回推 Agent</h2>
+
+    <h3>核心价值</h3>
+    <div class="concept-card">
+      <div class="ck-title">这是从"单向通知"到"双向对话"的关键一步</div>
+      <p>没有这个能力，机器人只能发消息出去，<strong>用户的回复就石沉大海了</strong>。Agent 收不到反馈，就无法实现"远程指挥 / 风险确认"等核心场景。</p>
+    </div>
+
+    <h3>用户体验</h3>
+    <div class="demo-chat">
+      <div class="chat-row agent">
+        <span class="chat-role">AGENT</span>
+        <div class="chat-bubble">（电脑上）准备删除 5 个测试文件，已通过机器人征求你的确认...</div>
+      </div>
+      <div class="chat-row bot">
+        <span class="chat-role">机器人</span>
+        <div class="chat-bubble">（POPO 推到主人手机）<strong>代码助手机器人</strong>：准备删除 5 个测试文件，确认请回 yes</div>
+      </div>
+      <div class="chat-row user">
+        <span class="chat-role">用户</span>
+        <div class="chat-bubble">（手机回复机器人）yes</div>
+      </div>
+      <div class="chat-row agent">
+        <span class="chat-role">AGENT</span>
+        <div class="chat-bubble">收到主人回复 "yes"，继续执行删除操作...</div>
+      </div>
+    </div>
+
+    <h3>需求范围</h3>
+    <div class="info-block">
+      <ul>
+        <li><strong>触发事件（本期支持两类）</strong>：
+          <ul style="margin-top: 4px;">
+            <li>① 用户在 POPO 中给机器人发消息（即"<strong>单聊回复机器人</strong>"）</li>
+            <li>② 用户在群里 <strong>@机器人</strong> 的消息</li>
+          </ul>
+        </li>
+        <li><strong>推送方式</strong>：复用<strong>机器人当前已具备的长连接能力</strong>，把回调消息实时推到 Agent，无需用户配置 Webhook、内网穿透等。</li>
+        <li><strong>推送内容</strong>：使用<strong>机器人当前已具备的回调能力</strong>原样输出，本期不做额外裁剪和定制。</li>
+      </ul>
+    </div>
+
+    <div class="callout tip">
+      💡 <strong>对用户的好处</strong>：用户什么都不用配——CLI 一旦在跑，机器人收到的回复 / 群内 @ 消息就会自动推给 Agent。本地 Agent 用户无需把服务暴露到公网。
+    </div>
+  </section>
+
+  <!-- ============ 7 端到端流程 ============ -->
+  <section>
+    <h2><span class="num">7</span>端到端用户流程</h2>
+
+    <h3>首次创建（一次性）</h3>
+    <div class="flow-step">
+      <div class="fs-num">1</div>
+      <div>
+        <div class="fs-name">在终端输入指令创建</div>
+        <div class="fs-desc">用户在终端内输入<strong>创建机器人指令</strong>，CLI 在终端内弹出二维码。</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">2</div>
+      <div>
+        <div class="fs-name">扫码 → 客户端创建</div>
+        <div class="fs-desc">用 POPO 客户端扫一扫，进入"创建机器人"页面，输入名称（沿用客户端已有体验，含名称 / 头像 / 可使用范围）。</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">3</div>
+      <div>
+        <div class="fs-name">创建成功 → 自动绑定</div>
+        <div class="fs-desc">客户端提示"创建成功"并跳转至机器人助手；CLI 端也自动完成绑定，告诉用户"机器人 [名称] 已可用"。</div>
+      </div>
+    </div>
+
+    <h3>日常使用</h3>
+    <div class="flow-step">
+      <div class="fs-num">A</div>
+      <div>
+        <div class="fs-name">Agent 发消息</div>
+        <div class="fs-desc">用户对话式让 Agent 用某个机器人发消息 → Agent 通过 CLI 调用 → 机器人代发出。</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">B</div>
+      <div>
+        <div class="fs-name">用户回复机器人</div>
+        <div class="fs-desc">接收方在 POPO 中正常回复机器人，<strong>不需要任何特殊操作</strong>。</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">C</div>
+      <div>
+        <div class="fs-name">Agent 收到回调，继续任务</div>
+        <div class="fs-desc">回调消息通过长连接实时推到 Agent，Agent 根据用户回复决定下一步动作（继续 / 中止 / 改方向）。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 8 与已有需求的关系 ============ -->
+  <section>
+    <h2><span class="num">8</span>与"IM Skill 给机器人发消息"的关系</h2>
+
+    <p>本 PRD 与之前提的 <strong>「IM Skill 支持给机器人发消息」</strong> 是<strong>互补关系</strong>，不是替代：</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:30%">维度</th><th>IM Skill 给机器人发消息</th><th>本 PRD（CLI 使用机器人）</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>谁是消息发送方</strong></td>
+          <td>用户本人（用 CLI 帮自己给机器人发消息）</td>
+          <td>机器人（Agent 借机器人身份对外发消息）</td>
+        </tr>
+        <tr>
+          <td><strong>谁是消息接收方</strong></td>
+          <td>机器人</td>
+          <td>普通用户 / 群</td>
+        </tr>
+        <tr>
+          <td><strong>典型场景</strong></td>
+          <td>"让 KM 小助手帮我搜一下 X"</td>
+          <td>"远程指挥 Agent，让它通过机器人来问我 yes/no"</td>
+        </tr>
+        <tr>
+          <td><strong>是否需要回调</strong></td>
+          <td>否（一次性请求-响应）</td>
+          <td>是（双向对话闭环）</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      📌 <strong>合在一起看</strong>：两个能力上线后，POPO CLI 在"AI ↔ 机器人 ↔ 人"三方之间形成<strong>完整的双向通信能力</strong>。
+    </div>
+  </section>
+
+  <!-- ============ 9 验收标准 ============ -->
+  <section>
+    <h2><span class="num">9</span>验收标准</h2>
+
+    <table>
+      <thead>
+        <tr><th style="width:10%">#</th><th style="width:30%">验收项</th><th>判定标准</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>V1</td>
+          <td>扫码创建机器人</td>
+          <td>已登录用户在 CLI 触发后，能在 30 秒内完成扫码 → 创建 → 绑定全流程，CLI 端能感知到"机器人已可用"。</td>
+        </tr>
+        <tr>
+          <td>V2</td>
+          <td>多机器人支持</td>
+          <td>同一用户可重复扫码创建 N 个机器人；Agent 能按名称选择用哪个发送。</td>
+        </tr>
+        <tr>
+          <td>V3</td>
+          <td>机器人发消息</td>
+          <td>消息成功送达，接收方看到的发送方为机器人名称 + 头像；支持<strong>文本、图片、文件</strong>三种消息类型。</td>
+        </tr>
+        <tr>
+          <td>V4</td>
+          <td>权限校验</td>
+          <td>非本地登录用户无法操作他人机器人；发送给"机器人可使用范围外"的对象时被拒绝并明确提示。</td>
+        </tr>
+        <tr>
+          <td>V5</td>
+          <td>回调实时性</td>
+          <td>用户回复机器人后，Agent 应在<strong>秒级内</strong>收到回调消息（取决于长连接延迟）。</td>
+        </tr>
+        <tr>
+          <td>V6</td>
+          <td>用户零额外配置</td>
+          <td>用户除"扫码"外不需要做任何额外配置（无 Webhook、无内网穿透、无开发者后台操作）。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ 10 埋点事件 ============ -->
+  <section>
+    <h2><span class="num">10</span>埋点事件</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:8%">#</th>
+          <th style="width:24%">事件</th>
+          <th>关键参数 / 说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>E1</strong></td>
+          <td>机器人创建成功</td>
+          <td><strong>参数</strong>：创建时间、用户、本机号</td>
+        </tr>
+        <tr>
+          <td><strong>E2</strong></td>
+          <td>机器人发消息</td>
+          <td>走 <strong>Fabric 后台接口调用</strong>埋点链路，支持统计<strong>机器人发消息接口调用次数</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+<footer>POPO CLI · 机器人能力 PRD V1.0 · 2026-06-10</footer>
+</body>
+</html>
