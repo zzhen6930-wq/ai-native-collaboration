@@ -558,8 +558,8 @@
       <tbody>
         <tr>
           <td><strong>能力 1</strong></td>
-          <td>扫码创建专属机器人</td>
-          <td>一次扫码完成机器人创建与绑定，不用懂"app_id / app_secret / 开发者后台"等技术概念。</td>
+          <td>扫码创建 / 绑定专属机器人</td>
+          <td>一次扫码即可<strong>新建</strong>或<strong>从已有机器人选择</strong>，不用懂"app_id / app_secret / 开发者后台"等技术概念。</td>
         </tr>
         <tr>
           <td><strong>能力 2</strong></td>
@@ -582,15 +582,15 @@
     <h3>核心逻辑</h3>
     <ul>
       <li>用户在终端内<strong>输入创建机器人的指令</strong>，终端展示<strong>一个二维码</strong>。</li>
-      <li>用户用 POPO 客户端扫码 → 跳转至 POPO 机器人创建页 → 输入名称 → 创建成功 → 自动跳转至机器人助手。</li>
-      <li>创建成功后，CLI 自动完成"机器人 ↔ 当前 Agent"的绑定，整个流程<strong>用户无感</strong>。</li>
+      <li>用户用 POPO 客户端扫码 → 进入机器人配置页 → <strong>选择创建方式（新建机器人 或 从已有机器人选择）</strong> → 完成配置 → 自动跳转至机器人助手。</li>
+      <li>无论新建还是选已有，CLI 端都会自动完成"机器人 ↔ 当前 Agent"的绑定，整个流程<strong>用户无感</strong>。</li>
     </ul>
 
     <div class="callout tip">
-      💡 <strong>体验对齐已有能力</strong>：扫码创建机器人的客户端流程<strong>复用 POPO 现有的"扫一扫创建机器人"能力</strong>（含名称、头像、可使用范围等设置），CLI 只负责"产出二维码"和"接收创建结果"。
+      💡 <strong>体验对齐已有能力</strong>：扫码后客户端的两条流程（新建 / 从已有选择）都<strong>完全复用 POPO 现有能力</strong>，仅需做少量文案改动；CLI 只负责"产出二维码"和"接收创建/绑定结果"。
     </div>
 
-    <h3>客户端页面调整（不能完全复用，需 UX 出稿）</h3>
+    <h3>客户端页面调整（仅文案，不重做）</h3>
     <table>
       <thead>
         <tr><th style="width:25%">调整项</th><th>原现状</th><th>本期要求</th></tr>
@@ -604,20 +604,20 @@
         <tr>
           <td><strong>页面下方按钮</strong></td>
           <td>同时有"创建"和"绑定已有"两个按钮</td>
-          <td><strong>去掉"绑定已有"按钮</strong>，只保留"创建"按钮</td>
+          <td>改为"<strong>创建</strong>"和"<strong>从已有机器人选择</strong>"两个按钮</td>
         </tr>
         <tr>
           <td><strong>创建过程中的页面图片</strong></td>
           <td>展示龙虾形象</td>
-          <td><strong>替换图片，不展示龙虾</strong>，具体由 UX 出稿</td>
+          <td><strong>替换图片，不展示龙虾</strong>，沿用 UX 新稿</td>
         </tr>
       </tbody>
     </table>
 
-    <h4 style="margin-top: 20px;">UX 视觉稿（设置 / 创建中 / 创建成功）</h4>
+    <h4 style="margin-top: 20px;">UX 视觉稿（新建 / 从已有选择 全流程）</h4>
     <figure style="margin: 12px 0 0; text-align: center;">
-      <img src="创建机器人.png" alt="创建机器人 UX 稿" style="max-width: 100%; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.08);" />
-      <figcaption style="font-size: 12px; color: var(--grey); margin-top: 8px;">扫码后客户端三态：① 设置（名称 + 头像 + 简介） → ② 创建中 → ③ 创建成功，点击"开启对话"进入机器人助手</figcaption>
+      <img src="创建机器人新.png" alt="创建机器人 UX 稿" style="max-width: 100%; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.08);" />
+      <figcaption style="font-size: 12px; color: var(--grey); margin-top: 8px;">扫码后客户端流程：① 创建（设置名称/简介） / 从已有机器人选择 → ② 配置/选择（含授权提示）→ ③ 完成 → 跳转机器人助手</figcaption>
     </figure>
 
     <h3>关键约束</h3>
@@ -627,16 +627,16 @@
       </thead>
       <tbody>
         <tr>
-          <td><strong>只支持新建</strong></td>
-          <td>每次扫码都<strong>创建一个新机器人</strong>，不支持"绑定已有机器人"。原因：已有机器人可能已被绑给别的 Agent，重复绑定会导致回调消息错发。</td>
+          <td><strong>支持两种方式</strong></td>
+          <td>用户可以选择<strong>新建机器人</strong>，也可以<strong>从自己已有的机器人列表中选择</strong>一个绑定到 Agent。两种方式都完整复用 POPO 现有能力。</td>
         </tr>
         <tr>
           <td><strong>支持多机器人</strong></td>
-          <td>同一用户可以重复创建多个机器人，分别给不同 Agent / 不同任务用。Agent 调用时可<strong>对话式指定</strong>用哪个机器人（按机器人名称选择）。</td>
+          <td>同一用户可以多次创建/绑定，拥有多个机器人，分别给不同 Agent / 不同任务用。Agent 调用时可<strong>对话式指定</strong>用哪个机器人（按机器人名称选择）。</td>
         </tr>
         <tr>
           <td><strong>归属绑定</strong></td>
-          <td>机器人会绑定到<strong>扫码时所使用的 POPO 客户端用户</strong>名下（即"扫码人"为机器人创建者，而非 CLI 当前登录用户）。</td>
+          <td>机器人会绑定到<strong>扫码时所使用的 POPO 客户端用户</strong>名下（即"扫码人"为机器人创建者/绑定者，而非 CLI 当前登录用户）。</td>
         </tr>
       </tbody>
     </table>
@@ -738,13 +738,22 @@
             <li>② 用户在群里 <strong>@机器人</strong> 的消息</li>
           </ul>
         </li>
-        <li><strong>推送方式</strong>：复用<strong>机器人当前已具备的长连接能力</strong>，把回调消息实时推到 Agent，无需用户配置 Webhook、内网穿透等。</li>
+        <li><strong>推送方式</strong>：复用<strong>机器人当前已具备的长连接能力</strong>，把回调消息实时推到 Agent，<strong>用户无需配置内网穿透或公网服务</strong>。</li>
         <li><strong>推送内容</strong>：使用<strong>机器人当前已具备的回调能力</strong>原样输出，本期不做额外裁剪和定制。</li>
       </ul>
     </div>
 
+    <h3>实现方案（与开发对齐）</h3>
+    <div class="info-block">
+      <ul>
+        <li>用户在终端<strong>执行创建机器人指令</strong>时，CLI 自动将<strong>机器人 Webhook</strong> 写入<strong>当前安装 CLI 的 Agent 文件路径</strong>下。</li>
+        <li>POPO 收到用户回复 / @机器人事件后，通过<strong>机器人已具备的长连接</strong>实时推送回调消息到该 Webhook 地址。</li>
+        <li>Agent 直接从本地 Webhook 接收消息，<strong>不需要用户额外配置 Webhook URL、内网穿透或部署任何服务</strong>。</li>
+      </ul>
+    </div>
+
     <div class="callout tip">
-      💡 <strong>对用户的好处</strong>：用户什么都不用配——CLI 一旦在跑，机器人收到的回复 / 群内 @ 消息就会自动推给 Agent。本地 Agent 用户无需把服务暴露到公网。
+      💡 <strong>对用户的好处</strong>：从用户视角看，扫码 → 创建机器人 → 立即可用，整个回调链路是"<strong>开箱即用</strong>"的，无需任何额外配置。
     </div>
   </section>
 
@@ -757,21 +766,21 @@
       <div class="fs-num">1</div>
       <div>
         <div class="fs-name">在终端输入指令创建</div>
-        <div class="fs-desc">用户在终端内输入<strong>创建机器人指令</strong>，CLI 在终端内弹出二维码。</div>
+        <div class="fs-desc">用户在终端内输入<strong>创建机器人指令</strong>，CLI 在终端内弹出二维码；同时 CLI 自动将<strong>机器人 Webhook 写入本地 Agent 文件路径</strong>，为后续回调做好准备。</div>
       </div>
     </div>
     <div class="flow-step">
       <div class="fs-num">2</div>
       <div>
-        <div class="fs-name">扫码 → 客户端创建</div>
-        <div class="fs-desc">用 POPO 客户端扫一扫，进入"创建机器人"页面，输入名称（沿用客户端已有体验，含名称 / 头像 / 可使用范围）。</div>
+        <div class="fs-name">POPO 扫码 → 选择创建方式</div>
+        <div class="fs-desc">用 POPO 客户端扫一扫，进入机器人配置页，<strong>选择"新建"或"从已有机器人选择"</strong>（沿用客户端已有体验，含名称 / 头像 / 可使用范围等设置）。</div>
       </div>
     </div>
     <div class="flow-step">
       <div class="fs-num">3</div>
       <div>
-        <div class="fs-name">创建成功 → 自动绑定</div>
-        <div class="fs-desc">客户端提示"创建成功"并跳转至机器人助手；CLI 端也自动完成绑定，告诉用户"机器人 [名称] 已可用"。</div>
+        <div class="fs-name">配置完成 → 自动绑定</div>
+        <div class="fs-desc">客户端提示"配置成功"并跳转至机器人助手；CLI 端也自动完成绑定，告诉用户"机器人 [名称] 已可用"。</div>
       </div>
     </div>
 
