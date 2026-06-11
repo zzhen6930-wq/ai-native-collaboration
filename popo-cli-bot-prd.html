@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>POPO CLI · 机器人能力 PRD</title>
+<title>POPO CLI · 机器人发消息能力 PRD</title>
 <style>
   :root {
     --primary: #2563EB;
@@ -45,7 +45,6 @@
     box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
   }
 
-  /* ======== Header ======== */
   .doc-header {
     padding: 56px 48px 44px;
     background: linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #8B5CF6 100%);
@@ -99,7 +98,6 @@
   .meta-info span { color: var(--grey); }
   .meta-info b { color: var(--ink); margin-left: 6px; }
 
-  /* ======== Sections ======== */
   section {
     padding: 44px 48px;
     border-bottom: 1px solid var(--border);
@@ -146,7 +144,6 @@
   ul { padding-left: 22px; margin-bottom: 12px; }
   strong { color: var(--ink); font-weight: 700; }
 
-  /* 概念卡 */
   .concept-card {
     background: linear-gradient(135deg, #EFF6FF, #F5F3FF);
     border: 1px solid var(--primary-light);
@@ -163,7 +160,6 @@
   }
   .concept-card p { margin: 0; color: var(--ink-2); }
 
-  /* 场景卡 */
   .scene-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -205,7 +201,6 @@
     line-height: 1.6;
   }
 
-  /* Flow Step */
   .flow-step {
     display: grid;
     grid-template-columns: 50px 1fr;
@@ -248,7 +243,6 @@
     color: var(--primary-deep);
   }
 
-  /* Demo chat */
   .demo-chat {
     background: #FAFBFC;
     border: 1px solid var(--border);
@@ -289,7 +283,6 @@
     border-color: var(--green);
   }
 
-  /* Info block */
   .info-block {
     background: var(--grey-light);
     border-radius: 8px;
@@ -306,7 +299,6 @@
   .info-block ul { padding-left: 20px; margin: 0; }
   .info-block li { font-size: 14px; }
 
-  /* 提示框 */
   .callout {
     border-left: 4px solid var(--primary);
     background: var(--primary-light);
@@ -328,7 +320,6 @@
   }
   .callout strong { color: inherit; }
 
-  /* Table */
   table {
     width: 100%;
     border-collapse: collapse;
@@ -354,55 +345,6 @@
   }
   tr:last-child td { border-bottom: none; }
 
-  /* 全链路图 */
-  .arch-flow {
-    background: #FAFBFC;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    margin: 16px 0;
-  }
-  .arch-row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 14px;
-  }
-  .arch-row:last-child { margin-bottom: 0; }
-  .arch-node {
-    background: #fff;
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 10px;
-    text-align: center;
-    font-size: 12.5px;
-    font-weight: 700;
-    color: var(--ink-2);
-  }
-  .arch-node.user { border-color: var(--primary); background: var(--primary-light); color: var(--primary-deep); }
-  .arch-node.agent { border-color: var(--green); background: var(--green-light); color: #065F46; }
-  .arch-node.cli { border-color: var(--purple); background: var(--purple-light); color: #5B21B6; }
-  .arch-node.popo { border-color: var(--orange); background: var(--orange-light); color: #9A3412; }
-  .arch-node.bot { border-color: var(--pink); background: var(--pink-light); color: #9D174D; }
-  .arch-arrow {
-    text-align: center;
-    color: var(--grey);
-    font-weight: 900;
-    font-size: 16px;
-  }
-  .arch-flow .row-label {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    color: var(--grey);
-    margin-bottom: 6px;
-    text-transform: uppercase;
-  }
-  .arch-flow .row-label.in { color: var(--green); }
-  .arch-flow .row-label.out { color: var(--orange); }
-
-  /* 不在范围内 */
   .out-scope-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -426,6 +368,35 @@
     line-height: 1.55;
   }
 
+  /* 闭环流程图 */
+  .pipeline {
+    background: #FAFBFC;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin: 16px 0;
+  }
+  .pipeline-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    align-items: center;
+  }
+  .pipeline-node {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .pipeline-node.n1 { border-color: var(--primary); background: var(--primary-light); color: var(--primary-deep); }
+  .pipeline-node.n2 { border-color: var(--green); background: var(--green-light); color: #065F46; }
+  .pipeline-node.n3 { border-color: var(--purple); background: var(--purple-light); color: #5B21B6; }
+  .pipeline-node.n4 { border-color: var(--orange); background: var(--orange-light); color: #9A3412; }
+  .pipeline-arrow { text-align: center; color: var(--grey); font-weight: 900; font-size: 16px; }
+
   footer {
     background: var(--ink);
     color: var(--grey);
@@ -447,14 +418,14 @@
   <!-- ============ Header ============ -->
   <div class="doc-header">
     <span class="label">PRD · POPO 机器人能力</span>
-    <h1>通过 CLI 使用 POPO 机器人</h1>
-    <p class="subtitle">让 Agent 拥有自己的"身份"——以机器人身份发消息、接收用户回复，打通 AI 与人的双向沟通闭环</p>
+    <h1>通过 CLI 使用 POPO 机器人发消息</h1>
+    <p class="subtitle">通过新增 Skill 让 Agent 学会"用机器人身份发消息"，本期只做发消息，不做创建、不做回调，让用户最快用起来。</p>
   </div>
 
   <div class="meta-info">
-    <span>文档版本：<b>V1.0</b></span>
+    <span>文档版本：<b>V2.0</b></span>
     <span>作者：<b>青远(张振)</b></span>
-    <span>创建日期：<b>2026-06-10</b></span>
+    <span>更新日期：<b>2026-06-11</b></span>
     <span>状态：<b>待评审</b></span>
   </div>
 
@@ -463,25 +434,23 @@
     <h2><span class="num">1</span>背景与价值</h2>
 
     <h3>当前问题</h3>
-    <p>POPO CLI 当前只能用<strong>用户本人的身份</strong>发消息。这带来三个问题：</p>
+    <p>POPO CLI 当前只能用<strong>用户本人的身份</strong>发消息。这带来两个核心问题：</p>
     <ul>
-      <li><strong>用户呼声</strong>：AI coding 背景下，越来越多用户使用自己的 Agent 处理工作，CLI 用户群内多位用户反馈<strong>需要支持连接机器人的能力</strong>。</li>
-      <li><strong>群内身份诉求</strong>：很多用户向群里发消息时<strong>希望使用机器人身份</strong>，而不是自己的身份，以免产生误会。</li>
-      <li><strong>单向沟通</strong>：用户能让 Agent 发消息，但<strong>对方回复的消息回不到 Agent</strong>，无法形成"AI ↔ 人"的对话闭环。</li>
+      <li><strong>用户呼声</strong>：AI coding 背景下，越来越多用户使用自己的 Agent 处理工作，CLI 用户群内多位用户反馈<strong>需要支持以机器人身份发消息</strong>。</li>
+      <li><strong>群内身份诉求</strong>：很多用户向群里发消息时<strong>希望使用机器人身份</strong>，而不是自己的身份，以免被同事误以为是用户本人发言。</li>
     </ul>
 
     <h3>解决方案</h3>
     <div class="concept-card">
-      <div class="ck-title">核心思路</div>
-      <p>让用户可以通过 CLI <strong>扫码创建一个专属的 POPO 机器人</strong>，作为自己 Agent 的"代言人"。Agent 通过这个机器人对外发消息，对方的回复也能通过<strong>长连接实时推回 Agent</strong>，形成完整的双向对话能力。</p>
+      <div class="ck-title">核心思路（V2 调整）</div>
+      <p>本期<strong>不在本地绑定机器人</strong>——为了发消息这一个动作让用户去扫码创建 / 绑定机器人对用户来说<strong>太重</strong>。改为：在<strong>安装 CLI 时附带一个新 Skill</strong>，由它教会 Agent "如何用机器人身份发消息"——用户在指令里直接说出机器人名称，Agent 自动完成"搜索机器人 → 校验权限 → 调用开放平台发消息"。</p>
     </div>
 
     <h3>用户价值</h3>
     <ul>
-      <li>✅ <strong>满足用户呼声</strong>：补齐 CLI 用户群反馈最多的"机器人能力"，让自己的 Agent 真正能用。</li>
+      <li>✅ <strong>用户零配置</strong>：不需要扫码、不需要本地绑定，安装 CLI 即可使用。</li>
       <li>✅ <strong>群内身份合规</strong>：用机器人身份发消息，避免被同事误以为是用户本人发言。</li>
-      <li>✅ <strong>双向闭环</strong>：用户可以"回复机器人 / 群内 @机器人" → Agent 实时收到 → 继续执行任务。</li>
-      <li>✅ <strong>低门槛</strong>：扫码一步创建，不需要去开发者后台手动配置。</li>
+      <li>✅ <strong>满足用户呼声</strong>：补齐 CLI 用户群反馈最多的"机器人发消息"能力。</li>
     </ul>
   </section>
 
@@ -491,338 +460,216 @@
 
     <div class="scene-grid">
       <div class="scene-card s1">
-        <span class="sc-tag">场景 1 · 远程指挥（核心）</span>
-        <div class="sc-title">手机远程指挥电脑 Agent</div>
-        <p class="sc-desc">出差或在外，开发同学用手机指挥电脑上的 Agent 写代码。Agent 遇到需要确认的事项（如"是否覆盖现有文件？"），通过机器人在 POPO 给主人发消息，<strong>主人手机回复 "yes"</strong>，Agent 收到后继续执行。</p>
+        <span class="sc-tag">场景 1 · 群内身份合规</span>
+        <div class="sc-title">用机器人身份在群里发通知</div>
+        <p class="sc-desc">用户对 Agent 说："让 [运维助手] 在 XX 群里发条消息：今晚 22:00 维护，预计 30 分钟。" Agent 用运维助手机器人身份发出，群成员一眼看出"这是机器人发的官方通知"，不会误以为是用户本人发言。</p>
       </div>
 
       <div class="scene-card s2">
-        <span class="sc-tag">场景 2 · 主动通知</span>
-        <div class="sc-title">Agent 任务完成后主动播报</div>
-        <p class="sc-desc">长任务（部署、跑数据、生成报告）完成后，Agent 通过机器人推送一条"任务已完成"消息，附带结果链接，让用户不必盯着终端等待。</p>
+        <span class="sc-tag">场景 2 · 任务结果播报</span>
+        <div class="sc-title">Agent 任务完成后机器人推送结果</div>
+        <p class="sc-desc">长任务（部署、跑数据、生成报告）完成后，Agent 通过用户指定的机器人推送一条"任务已完成 + 结果链接"给指定的人或群。</p>
       </div>
 
       <div class="scene-card s3">
-        <span class="sc-tag">场景 3 · 风险确认</span>
-        <div class="sc-title">高风险操作前的人工确认</div>
-        <p class="sc-desc">Agent 准备执行高风险动作（删数据、上线、改配置）前，先通过机器人发"确认是否执行 X？"，等待用户回复确认后再继续，避免误操作。</p>
+        <span class="sc-tag">场景 3 · 多 Agent 各司其职</span>
+        <div class="sc-title">不同 Agent 用不同机器人</div>
+        <p class="sc-desc">用户已有多个机器人（如"代码助手"、"日报助手"、"运维助手"），不同 Agent 在不同任务里使用不同机器人发消息，消息来源一目了然，不会串台。</p>
       </div>
 
       <div class="scene-card s4">
-        <span class="sc-tag">场景 4 · 多 Agent 协作</span>
-        <div class="sc-title">多个 Agent 各自有独立机器人</div>
-        <p class="sc-desc">用户为不同 Agent（比如"代码助手"、"运维助手"、"日报助手"）各自绑定一个机器人，消息来源一目了然，不会串台。</p>
+        <span class="sc-tag">场景 4 · 转发 / 通知放大</span>
+        <div class="sc-title">机器人代为推送</div>
+        <p class="sc-desc">某些通知不适合用个人身份发（避免对方误认为是私人请求），但又希望对方收到。借机器人身份发出，更显正式。</p>
       </div>
     </div>
   </section>
 
-  <!-- ============ 3 整体能力图 ============ -->
+  <!-- ============ 3 能力总览 ============ -->
   <section>
     <h2><span class="num">3</span>能力总览</h2>
 
-    <p>本期需要交付 <strong>3 个连贯的能力</strong>，共同构成"Agent 拥有专属机器人"的完整闭环：</p>
+    <p>本期交付<strong>一个能力</strong>：在安装 CLI 时携带一个新的 Skill，让 Agent 知道"如何用机器人身份发消息"。完整运行链路如下：</p>
 
-    <div class="arch-flow">
-      <div class="row-label">① 一次性配置</div>
-      <div class="arch-row">
-        <div class="arch-node cli">终端指令</div>
-        <div class="arch-arrow">→</div>
-        <div class="arch-node user">POPO 扫码</div>
-        <div class="arch-arrow">→</div>
-        <div class="arch-node bot">创建机器人</div>
-      </div>
-
-      <div class="row-label out" style="margin-top: 12px;">② 发送消息（Agent 主动）</div>
-      <div class="arch-row">
-        <div class="arch-node agent">Agent</div>
-        <div class="arch-arrow">→</div>
-        <div class="arch-node cli">CLI 调用</div>
-        <div class="arch-arrow">→</div>
-        <div class="arch-node bot">机器人发消息</div>
-      </div>
-
-      <div class="row-label in" style="margin-top: 12px;">③ 接收回复（用户回机器人）</div>
-      <div class="arch-row">
-        <div class="arch-node user">用户回机器人</div>
-        <div class="arch-arrow">→</div>
-        <div class="arch-node popo">POPO 长连接</div>
-        <div class="arch-arrow">→</div>
-        <div class="arch-node agent">Agent 收到回调</div>
+    <div class="pipeline">
+      <div class="pipeline-row">
+        <div class="pipeline-node n1">用户指令<br/>含机器人名称</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node n2">Skill 触发<br/>搜索机器人</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node n3">权限校验<br/>双重判定</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node n4">机器人身份<br/>发出消息</div>
       </div>
     </div>
 
     <table>
       <thead>
-        <tr><th style="width:10%">能力</th><th style="width:30%">名称</th><th>用户视角的价值</th></tr>
+        <tr><th style="width:24%">阶段</th><th>动作</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>能力 1</strong></td>
-          <td>扫码创建 / 绑定专属机器人</td>
-          <td>一次扫码即可<strong>新建</strong>或<strong>从已有机器人选择</strong>，不用懂"app_id / app_secret / 开发者后台"等技术概念。</td>
+          <td><strong>① 用户指令</strong></td>
+          <td>用户对 Agent 说："让 [机器人名称] 给 XX 发消息：YYY"，<strong>必须明确机器人名称</strong>。</td>
         </tr>
         <tr>
-          <td><strong>能力 2</strong></td>
-          <td>Agent 通过机器人发消息</td>
-          <td>Agent 用机器人身份给指定用户/群发消息，发送方显示为"机器人"，与用户身份解耦。</td>
+          <td><strong>② 搜索机器人</strong></td>
+          <td>Skill 引导 Agent 按"机器人名称"搜索，找到目标机器人。</td>
         </tr>
         <tr>
-          <td><strong>能力 3</strong></td>
-          <td>用户回复实时推送给 Agent</td>
-          <td>对方回复机器人的消息能实时推到 Agent，让 Agent 听得到"用户的反馈"，形成对话闭环。</td>
+          <td><strong>③ 权限校验</strong></td>
+          <td>双重判定：a) 当前用户对该机器人有<strong>操作权限</strong>；b) 接收人在该机器人<strong>可使用范围</strong>内。</td>
+        </tr>
+        <tr>
+          <td><strong>④ 调接口发送</strong></td>
+          <td>校验通过 → 用机器人身份调用 POPO 开放平台<strong>发消息接口</strong>，消息以机器人身份送达接收方。</td>
         </tr>
       </tbody>
     </table>
   </section>
 
-  <!-- ============ 4 能力一：创建机器人 ============ -->
+  <!-- ============ 4 Skill 设计 ============ -->
   <section>
-    <h2><span class="num">4</span>能力一 · 扫码创建机器人</h2>
+    <h2><span class="num">4</span>Skill 设计</h2>
 
-    <h3>核心逻辑</h3>
+    <h3>定位</h3>
     <ul>
-      <li>用户在终端内<strong>输入创建机器人的指令</strong>，终端展示<strong>一个二维码</strong>。</li>
-      <li>用户用 POPO 客户端扫码 → 进入机器人配置页 → <strong>选择创建方式（新建机器人 或 从已有机器人选择）</strong> → 完成配置 → 自动跳转至机器人助手。</li>
-      <li>无论新建还是选已有，CLI 端都会自动完成"机器人 ↔ 当前 Agent"的绑定，整个流程<strong>用户无感</strong>。</li>
+      <li>新增一个<strong>"机器人发消息" Skill</strong>，随 CLI 安装一并下发，用户无需手动启用。</li>
+      <li>Skill 的职责是<strong>告诉 Agent 怎么做</strong>：调用顺序、必要参数、权限判断点、错误处理。</li>
+      <li>本 Skill 与已有的"<strong>IM Skill 给机器人发消息</strong>"是<strong>互补</strong>关系（详见 §7）。</li>
     </ul>
 
-    <div class="callout tip">
-      💡 <strong>体验对齐已有能力</strong>：扫码后客户端的两条流程（新建 / 从已有选择）都<strong>完全复用 POPO 现有能力</strong>，仅需做少量文案改动；CLI 只负责"产出二维码"和"接收创建/绑定结果"。
+    <h3>用户使用方式</h3>
+    <div class="demo-chat">
+      <div class="chat-row user">
+        <span class="chat-role">用户</span>
+        <div class="chat-bubble">让 <strong>"代码助手"</strong> 在「研发周报群」里发条消息：本周代码合并已完成，详细见 xxx。</div>
+      </div>
+      <div class="chat-row agent">
+        <span class="chat-role">AGENT</span>
+        <div class="chat-bubble">已通过机器人「代码助手」在"研发周报群"发送消息 ✅</div>
+      </div>
+      <div class="chat-row bot">
+        <span class="chat-role">机器人</span>
+        <div class="chat-bubble">（在群里）<strong>代码助手</strong>：本周代码合并已完成，详细见 xxx</div>
+      </div>
     </div>
-
-    <h3>客户端页面调整（仅文案，不重做）</h3>
-    <table>
-      <thead>
-        <tr><th style="width:25%">调整项</th><th>原现状</th><th>本期要求</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>页面顶部文案</strong></td>
-          <td>"创建 OpenClaw 机器人"</td>
-          <td>改为"<strong>创建机器人</strong>"</td>
-        </tr>
-        <tr>
-          <td><strong>页面下方按钮</strong></td>
-          <td>同时有"创建"和"绑定已有"两个按钮</td>
-          <td>改为"<strong>创建</strong>"和"<strong>从已有机器人选择</strong>"两个按钮</td>
-        </tr>
-        <tr>
-          <td><strong>创建过程中的页面图片</strong></td>
-          <td>展示龙虾形象</td>
-          <td><strong>替换图片，不展示龙虾</strong>，沿用 UX 新稿</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h4 style="margin-top: 20px;">UX 视觉稿（新建 / 从已有选择 全流程）</h4>
-    <figure style="margin: 12px 0 0; text-align: center;">
-      <img src="创建机器人新.png" alt="创建机器人 UX 稿" style="max-width: 100%; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.08);" />
-      <figcaption style="font-size: 12px; color: var(--grey); margin-top: 8px;">扫码后客户端流程：① 创建（设置名称/简介） / 从已有机器人选择 → ② 配置/选择（含授权提示）→ ③ 完成 → 跳转机器人助手</figcaption>
-    </figure>
 
     <h3>关键约束</h3>
     <table>
       <thead>
-        <tr><th style="width:25%">约束</th><th>说明</th></tr>
+        <tr><th style="width:25%">项</th><th>说明</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>支持两种方式</strong></td>
-          <td>用户可以选择<strong>新建机器人</strong>，也可以<strong>从自己已有的机器人列表中选择</strong>一个绑定到 Agent。两种方式都完整复用 POPO 现有能力。</td>
+          <td><strong>必须指定机器人名称</strong></td>
+          <td>用户指令必须明确说明用哪个机器人发送（如"用 [运维助手] 发"）。Agent 不主动猜测、不默认选机器人。</td>
         </tr>
         <tr>
-          <td><strong>支持多机器人</strong></td>
-          <td>同一用户可以多次创建/绑定，拥有多个机器人，分别给不同 Agent / 不同任务用。Agent 调用时可<strong>对话式指定</strong>用哪个机器人（按机器人名称选择）。</td>
+          <td><strong>消息内容能力</strong></td>
+          <td>支持<strong>文本、图片、文件</strong>三类内容，与当前 CLI 已支持的发消息能力保持一致。</td>
         </tr>
         <tr>
-          <td><strong>归属绑定</strong></td>
-          <td>机器人会绑定到<strong>扫码时所使用的 POPO 客户端用户</strong>名下（即"扫码人"为机器人创建者/绑定者，而非 CLI 当前登录用户）。</td>
+          <td><strong>发送方显示</strong></td>
+          <td>消息送达时，发送方显示为<strong>机器人名称 + 头像</strong>，<strong>不显示用户本人身份</strong>。</td>
+        </tr>
+        <tr>
+          <td><strong>一次成行</strong></td>
+          <td>Skill 内部把"搜机器人 → 校权限 → 发消息"封装为<strong>顺序动作</strong>，避免 Agent 来回试错、多次工具调用。</td>
         </tr>
       </tbody>
     </table>
 
-    <h3>本期不做</h3>
-    <div class="out-scope-grid">
-      <div class="out-scope-item">
-        <div class="os-title">解绑 / 删除机器人</div>
-        <div class="os-reason">本期暂不通过 CLI 提供解绑能力，机器人创建后由用户在 POPO 客户端管理。</div>
-      </div>
-      <div class="out-scope-item">
-        <div class="os-title">CLI 内编辑机器人信息</div>
-        <div class="os-reason">机器人名称、头像、可使用范围等都在 POPO 客户端配置，CLI 不重复实现。</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ 5 能力二：用机器人发消息 ============ -->
-  <section>
-    <h2><span class="num">5</span>能力二 · Agent 通过机器人发消息</h2>
-
-    <h3>用户体验</h3>
-    <p>使用方式与"<strong>当前 CLI 已有的发消息能力</strong>"完全对齐，用户不需要学习新命令、新参数。差异只有一点：<strong>发送身份</strong>从"用户本人"变成"机器人"。</p>
-
-    <div class="demo-chat">
-      <div class="chat-row user">
-        <span class="chat-role">用户</span>
-        <div class="chat-bubble">让我的"代码助手机器人"给王五发条消息：今天的代码已合并到主干，请关注。</div>
-      </div>
-      <div class="chat-row agent">
-        <span class="chat-role">AGENT</span>
-        <div class="chat-bubble">已通过机器人「代码助手」给王五发送消息 ✅</div>
-      </div>
-      <div class="chat-row bot">
-        <span class="chat-role">机器人</span>
-        <div class="chat-bubble">（在王五的 POPO 收件箱）<strong>代码助手机器人</strong>：今天的代码已合并到主干，请关注。</div>
-      </div>
-    </div>
-
-    <h3>需求范围</h3>
+    <h3>权限校验（两道闸门）</h3>
     <div class="info-block">
       <ul>
-        <li>机器人发消息的<strong>消息内容能力</strong>支持<strong>文本、图片、文件</strong>，与当前 CLI 已支持的发消息能力保持一致。</li>
-        <li>消息<strong>发送方</strong>显示为机器人名称与头像，<strong>不显示用户本人身份</strong>。</li>
-        <li>同一用户名下有多个机器人时，Agent 可通过<strong>机器人名称</strong>选择用哪个发送。</li>
-      </ul>
-    </div>
-
-    <h3>权限校验</h3>
-    <div class="info-block">
-      <div class="info-label">两道权限闸门</div>
-      <ul>
-        <li><strong>① 操作机器人的权限</strong>：只有<strong>本地登录 CLI 的用户</strong>本人能通过 CLI 操作自己创建的机器人，他人无法借用。</li>
-        <li><strong>② 机器人可使用范围（接收方）</strong>：与 POPO 已有的「<strong>机器人可使用范围</strong>」机制打通——机器人只能给"在其可使用范围内"的用户/群发消息，发到范围外会被拒绝。</li>
-      </ul>
-      <div class="info-label" style="margin-top: 10px;">不需要做的</div>
-      <ul>
-        <li>不需要单独设计"操作前二次确认"机制，登录态校验 + 范围校验已足够。</li>
+        <li><strong>① 操作机器人的权限</strong>：当前 CLI 用户必须有<strong>操作该机器人发消息的权限</strong>，否则 Skill 拒绝执行并向用户明确告知"无权限操作机器人 X"。</li>
+        <li><strong>② 接收方在可使用范围内</strong>：接收消息的用户 / 群必须在<strong>该机器人的"可使用范围"内</strong>，否则拒绝发送并告知"接收方不在机器人 X 的可使用范围"。</li>
+        <li>两个权限均通过<strong>POPO 开放平台已有机制</strong>判定，<strong>不在本地维护权限信息</strong>。</li>
       </ul>
     </div>
   </section>
 
-  <!-- ============ 6 能力三：消息回调 ============ -->
+  <!-- ============ 5 端到端流程 ============ -->
   <section>
-    <h2><span class="num">6</span>能力三 · 用户回复实时回推 Agent</h2>
+    <h2><span class="num">5</span>端到端用户流程</h2>
 
-    <h3>核心价值</h3>
-    <div class="concept-card">
-      <div class="ck-title">这是从"单向通知"到"双向对话"的关键一步</div>
-      <p>没有这个能力，机器人只能发消息出去，<strong>用户的回复就石沉大海了</strong>。Agent 收不到反馈，就无法实现"远程指挥 / 风险确认"等核心场景。</p>
-    </div>
-
-    <h3>用户体验</h3>
-    <div class="demo-chat">
-      <div class="chat-row agent">
-        <span class="chat-role">AGENT</span>
-        <div class="chat-bubble">（电脑上）准备删除 5 个测试文件，已通过机器人征求你的确认...</div>
-      </div>
-      <div class="chat-row bot">
-        <span class="chat-role">机器人</span>
-        <div class="chat-bubble">（POPO 推到主人手机）<strong>代码助手机器人</strong>：准备删除 5 个测试文件，确认请回 yes</div>
-      </div>
-      <div class="chat-row user">
-        <span class="chat-role">用户</span>
-        <div class="chat-bubble">（手机回复机器人）yes</div>
-      </div>
-      <div class="chat-row agent">
-        <span class="chat-role">AGENT</span>
-        <div class="chat-bubble">收到主人回复 "yes"，继续执行删除操作...</div>
-      </div>
-    </div>
-
-    <h3>需求范围</h3>
-    <div class="info-block">
-      <ul>
-        <li><strong>触发事件（本期支持两类）</strong>：
-          <ul style="margin-top: 4px;">
-            <li>① 用户在 POPO 中给机器人发消息（即"<strong>单聊回复机器人</strong>"）</li>
-            <li>② 用户在群里 <strong>@机器人</strong> 的消息</li>
-          </ul>
-        </li>
-        <li><strong>推送方式</strong>：复用<strong>机器人当前已具备的长连接能力</strong>，把回调消息实时推到 Agent，<strong>用户无需配置内网穿透或公网服务</strong>。</li>
-        <li><strong>推送内容</strong>：使用<strong>机器人当前已具备的回调能力</strong>原样输出，本期不做额外裁剪和定制。</li>
-      </ul>
-    </div>
-
-    <h3>实现方案（与开发对齐）</h3>
-    <div class="info-block">
-      <ul>
-        <li>用户在终端<strong>执行创建机器人指令</strong>时，CLI 自动将<strong>机器人 Webhook</strong> 写入<strong>当前安装 CLI 的 Agent 文件路径</strong>下。</li>
-        <li>POPO 收到用户回复 / @机器人事件后，通过<strong>机器人已具备的长连接</strong>实时推送回调消息到该 Webhook 地址。</li>
-        <li>Agent 直接从本地 Webhook 接收消息，<strong>不需要用户额外配置 Webhook URL、内网穿透或部署任何服务</strong>。</li>
-      </ul>
-    </div>
-
-    <div class="callout tip">
-      💡 <strong>对用户的好处</strong>：从用户视角看，扫码 → 创建机器人 → 立即可用，整个回调链路是"<strong>开箱即用</strong>"的，无需任何额外配置。
-    </div>
-  </section>
-
-  <!-- ============ 7 端到端流程 ============ -->
-  <section>
-    <h2><span class="num">7</span>端到端用户流程</h2>
-
-    <h3>首次创建（一次性）</h3>
     <div class="flow-step">
       <div class="fs-num">1</div>
       <div>
-        <div class="fs-name">在终端输入指令创建</div>
-        <div class="fs-desc">用户在终端内输入<strong>创建机器人指令</strong>，CLI 在终端内弹出二维码；同时 CLI 自动将<strong>机器人 Webhook 写入本地 Agent 文件路径</strong>，为后续回调做好准备。</div>
+        <div class="fs-name">用户向 Agent 下达指令</div>
+        <div class="fs-desc">用户在 Agent 对话中说出指令，<strong>明确指定机器人名称、接收方和消息内容</strong>。例："让 [代码助手] 给张三发消息：今晚部署 22:00 开始"。</div>
       </div>
     </div>
     <div class="flow-step">
       <div class="fs-num">2</div>
       <div>
-        <div class="fs-name">POPO 扫码 → 选择创建方式</div>
-        <div class="fs-desc">用 POPO 客户端扫一扫，进入机器人配置页，<strong>选择"新建"或"从已有机器人选择"</strong>（沿用客户端已有体验，含名称 / 头像 / 可使用范围等设置）。</div>
+        <div class="fs-name">Skill 引导 Agent 搜索机器人</div>
+        <div class="fs-desc">Skill 让 Agent 按"机器人名称"搜索 POPO 机器人，定位到目标机器人。</div>
       </div>
     </div>
     <div class="flow-step">
       <div class="fs-num">3</div>
       <div>
-        <div class="fs-name">配置完成 → 自动绑定</div>
-        <div class="fs-desc">客户端提示"配置成功"并跳转至机器人助手；CLI 端也自动完成绑定，告诉用户"机器人 [名称] 已可用"。</div>
-      </div>
-    </div>
-
-    <h3>日常使用</h3>
-    <div class="flow-step">
-      <div class="fs-num">A</div>
-      <div>
-        <div class="fs-name">Agent 发消息</div>
-        <div class="fs-desc">用户对话式让 Agent 用某个机器人发消息 → Agent 通过 CLI 调用 → 机器人代发出。</div>
+        <div class="fs-name">权限双重校验</div>
+        <div class="fs-desc">校验：① 当前用户能操作该机器人发消息；② 接收方在机器人可使用范围内。任一不满足，<strong>立即终止并告知用户</strong>。</div>
       </div>
     </div>
     <div class="flow-step">
-      <div class="fs-num">B</div>
+      <div class="fs-num">4</div>
       <div>
-        <div class="fs-name">用户回复机器人</div>
-        <div class="fs-desc">接收方在 POPO 中正常回复机器人，<strong>不需要任何特殊操作</strong>。</div>
+        <div class="fs-name">调用开放平台发送</div>
+        <div class="fs-desc">校验通过 → 以机器人身份调用 POPO 开放平台<strong>发消息接口</strong>，消息以机器人名义送达接收方。</div>
       </div>
     </div>
     <div class="flow-step">
-      <div class="fs-num">C</div>
+      <div class="fs-num">5</div>
       <div>
-        <div class="fs-name">Agent 收到回调，继续任务</div>
-        <div class="fs-desc">回调消息通过长连接实时推到 Agent，Agent 根据用户回复决定下一步动作（继续 / 中止 / 改方向）。</div>
+        <div class="fs-name">向用户反馈结果</div>
+        <div class="fs-desc">Agent 告知用户"已通过机器人 X 发送给 Y"，或在失败时给出明确原因（无权限 / 不在可使用范围 / 接口异常等）。</div>
       </div>
     </div>
   </section>
 
-  <!-- ============ 8 与已有需求的关系 ============ -->
+  <!-- ============ 6 本期不做 ============ -->
   <section>
-    <h2><span class="num">8</span>与"IM Skill 给机器人发消息"的关系</h2>
+    <h2><span class="num">6</span>本期不做</h2>
 
-    <p>本 PRD 与之前提的 <strong>「IM Skill 支持给机器人发消息」</strong> 是<strong>互补关系</strong>，不是替代：</p>
+    <div class="out-scope-grid">
+      <div class="out-scope-item">
+        <div class="os-title">扫码创建 / 绑定机器人</div>
+        <div class="os-reason">为发消息这一个动作让用户去扫码创建机器人太重，本期不做。用户使用前提：自己已在 POPO 客户端拥有可用机器人。</div>
+      </div>
+      <div class="out-scope-item">
+        <div class="os-title">本地保存机器人配置</div>
+        <div class="os-reason">不在本地存机器人 ID / app_id 等任何配置信息，每次按名称即时搜索，权限实时校验。</div>
+      </div>
+      <div class="out-scope-item">
+        <div class="os-title">消息回调 / 双向对话</div>
+        <div class="os-reason">本期只做"Agent → 机器人 → 接收方"单向发送。用户回复机器人的消息<strong>不回推 Agent</strong>，后续视用户呼声评估是否补做。</div>
+      </div>
+      <div class="out-scope-item">
+        <div class="os-title">默认机器人 / 自动选择</div>
+        <div class="os-reason">用户必须在指令中显式指定机器人名称，Skill 不做"猜默认机器人"逻辑，保持行为可预期。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7 与已有需求关系 ============ -->
+  <section>
+    <h2><span class="num">7</span>与已有 IM Skill 的关系</h2>
+
+    <p>本 PRD 与之前<strong>「IM Skill 支持给机器人发消息」</strong>的需求是<strong>互补</strong>关系，方向相反，合在一起构成"AI ↔ 机器人 ↔ 人"的完整发送闭环：</p>
 
     <table>
       <thead>
-        <tr><th style="width:30%">维度</th><th>IM Skill 给机器人发消息</th><th>本 PRD（CLI 使用机器人）</th></tr>
+        <tr><th style="width:30%">维度</th><th>IM Skill 给机器人发消息</th><th>本 PRD（机器人发消息）</th></tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>谁是消息发送方</strong></td>
-          <td>用户本人（用 CLI 帮自己给机器人发消息）</td>
-          <td>机器人（Agent 借机器人身份对外发消息）</td>
+          <td>用户本人</td>
+          <td>机器人（Agent 借机器人身份）</td>
         </tr>
         <tr>
           <td><strong>谁是消息接收方</strong></td>
@@ -830,26 +677,17 @@
           <td>普通用户 / 群</td>
         </tr>
         <tr>
-          <td><strong>典型场景</strong></td>
+          <td><strong>典型用法</strong></td>
           <td>"让 KM 小助手帮我搜一下 X"</td>
-          <td>"远程指挥 Agent，让它通过机器人来问我 yes/no"</td>
-        </tr>
-        <tr>
-          <td><strong>是否需要回调</strong></td>
-          <td>否（一次性请求-响应）</td>
-          <td>是（双向对话闭环）</td>
+          <td>"让 [代码助手] 在群里通知 X"</td>
         </tr>
       </tbody>
     </table>
-
-    <div class="callout">
-      📌 <strong>合在一起看</strong>：两个能力上线后，POPO CLI 在"AI ↔ 机器人 ↔ 人"三方之间形成<strong>完整的双向通信能力</strong>。
-    </div>
   </section>
 
-  <!-- ============ 9 验收标准 ============ -->
+  <!-- ============ 8 验收标准 ============ -->
   <section>
-    <h2><span class="num">9</span>验收标准</h2>
+    <h2><span class="num">8</span>验收标准</h2>
 
     <table>
       <thead>
@@ -858,41 +696,41 @@
       <tbody>
         <tr>
           <td>V1</td>
-          <td>扫码创建机器人</td>
-          <td>已登录用户在 CLI 触发后，能在 30 秒内完成扫码 → 创建 → 绑定全流程，CLI 端能感知到"机器人已可用"。</td>
+          <td>Skill 随 CLI 安装下发</td>
+          <td>用户安装 CLI 后，无需任何手动操作即可在 Agent 中使用"用机器人发消息"能力。</td>
         </tr>
         <tr>
           <td>V2</td>
-          <td>多机器人支持</td>
-          <td>同一用户可重复扫码创建 N 个机器人；Agent 能按名称选择用哪个发送。</td>
+          <td>按名称定位机器人</td>
+          <td>用户指令包含机器人名称时，Skill 能引导 Agent 准确找到该机器人；同名机器人或找不到时给出明确提示。</td>
         </tr>
         <tr>
           <td>V3</td>
-          <td>机器人发消息</td>
-          <td>消息成功送达，接收方看到的发送方为机器人名称 + 头像；支持<strong>文本、图片、文件</strong>三种消息类型。</td>
+          <td>权限双重校验</td>
+          <td>用户无操作权限 / 接收方不在可使用范围时，<strong>立即终止</strong>并向用户明确说明原因，不发送消息。</td>
         </tr>
         <tr>
           <td>V4</td>
-          <td>权限校验</td>
-          <td>非本地登录用户无法操作他人机器人；发送给"机器人可使用范围外"的对象时被拒绝并明确提示。</td>
+          <td>消息成功发送</td>
+          <td>校验通过后，消息以<strong>机器人身份</strong>（机器人名称 + 头像）送达接收方；支持文本 / 图片 / 文件三种内容。</td>
         </tr>
         <tr>
           <td>V5</td>
-          <td>回调实时性</td>
-          <td>用户回复机器人后，Agent 应在<strong>秒级内</strong>收到回调消息（取决于长连接延迟）。</td>
+          <td>一次调用完成</td>
+          <td>Skill 内部把"搜索 + 校验 + 发送"作为一次顺序动作完成，Agent 不需要在中间多次试错。</td>
         </tr>
         <tr>
           <td>V6</td>
-          <td>用户零额外配置</td>
-          <td>用户除"扫码"外不需要做任何额外配置（无 Webhook、无内网穿透、无开发者后台操作）。</td>
+          <td>用户零配置</td>
+          <td>用户除"在 POPO 客户端已有可用机器人"外，<strong>无需任何额外配置</strong>（无扫码、无本地绑定、无 webhook）。</td>
         </tr>
       </tbody>
     </table>
   </section>
 
-  <!-- ============ 10 埋点事件 ============ -->
+  <!-- ============ 9 埋点事件 ============ -->
   <section>
-    <h2><span class="num">10</span>埋点事件</h2>
+    <h2><span class="num">9</span>埋点事件</h2>
 
     <table>
       <thead>
@@ -905,13 +743,8 @@
       <tbody>
         <tr>
           <td><strong>E1</strong></td>
-          <td>机器人创建成功</td>
-          <td><strong>参数</strong>：创建时间、用户、本机号</td>
-        </tr>
-        <tr>
-          <td><strong>E2</strong></td>
           <td>机器人发消息</td>
-          <td>走 <strong>Fabric 后台接口调用</strong>埋点链路，支持统计<strong>机器人发消息接口调用次数</strong></td>
+          <td>走 <strong>Fabric 后台接口调用</strong>埋点链路，支持统计<strong>机器人发消息接口调用次数</strong>。</td>
         </tr>
       </tbody>
     </table>
@@ -919,6 +752,6 @@
 
 </div>
 
-<footer>POPO CLI · 机器人能力 PRD V1.0 · 2026-06-10</footer>
+<footer>POPO CLI · 机器人发消息能力 PRD V2.0 · 2026-06-11</footer>
 </body>
 </html>
