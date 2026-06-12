@@ -434,11 +434,18 @@
     <h2><span class="num">1</span>背景与价值</h2>
 
     <h3>当前问题</h3>
-    <p>POPO CLI 当前只能用<strong>用户本人的身份</strong>发消息。这带来两个核心问题：</p>
+    <p>POPO CLI 当前只能用<strong>用户本人的身份</strong>发消息。这带来三个核心问题：</p>
     <ul>
-      <li><strong>用户呼声</strong>：AI coding 背景下，越来越多用户使用自己的 Agent 处理工作，CLI 用户群内多位用户反馈<strong>需要支持以机器人身份发消息</strong>。</li>
+      <li><strong>用户呼声 ①（执行遇阻通知）</strong>：当 Agent 执行遇阻时，<strong>能通过机器人发消息提醒自己</strong>，然后人工介入处理问题。</li>
+      <li><strong>用户呼声 ②（任务完成播报）</strong>：当前有很多<strong>服务类机器人</strong>，当 Agent 完成各种任务后，业务希望<strong>通过不同的机器人发消息提醒给个人或群里</strong>。</li>
       <li><strong>群内身份诉求</strong>：很多用户向群里发消息时<strong>希望使用机器人身份</strong>，而不是自己的身份，以免被同事误以为是用户本人发言。</li>
     </ul>
+
+    <h4 style="margin-top: 20px;">真实用户反馈示例</h4>
+    <figure style="margin: 10px 0 0; text-align: center;">
+      <img src="机器人发消息举例.png" alt="机器人发消息真实用户场景举例" style="max-width: 100%; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.08);" />
+      <figcaption style="font-size: 12px; color: var(--grey); margin-top: 8px;">用户在 CLI 用户群内的真实反馈：拼车 Agent 撮合成功后，希望通过机器人直接 POPO CLI 发消息通知车主 / 车友。</figcaption>
+    </figure>
 
     <h3>解决方案</h3>
     <div class="concept-card">
@@ -518,7 +525,7 @@
         </tr>
         <tr>
           <td><strong>③ 权限校验</strong></td>
-          <td>双重判定：a) 当前用户对该机器人有<strong>操作权限</strong>；b) 接收人在该机器人<strong>可使用范围</strong>内。</td>
+          <td>双重判定：a) 当前用户是该机器人的<strong>开发者或管理员</strong>；b) 接收人在该机器人<strong>可使用范围</strong>内。</td>
         </tr>
         <tr>
           <td><strong>④ 调接口发送</strong></td>
@@ -583,7 +590,7 @@
     <h3>权限校验（两道闸门）</h3>
     <div class="info-block">
       <ul>
-        <li><strong>① 操作机器人的权限</strong>：当前 CLI 用户必须有<strong>操作该机器人发消息的权限</strong>，否则 Skill 拒绝执行并向用户明确告知"无权限操作机器人 X"。</li>
+        <li><strong>① 操作机器人的权限</strong>：当前 CLI 用户必须是<strong>该机器人的开发者或管理员</strong>，否则 Skill 拒绝执行并向用户明确告知"您不是机器人 X 的开发者或管理员，无权操作"。</li>
         <li><strong>② 接收方在可使用范围内</strong>：接收消息的用户 / 群必须在<strong>该机器人的"可使用范围"内</strong>，否则拒绝发送并告知"接收方不在机器人 X 的可使用范围"。</li>
         <li>两个权限均通过<strong>POPO 开放平台已有机制</strong>判定，<strong>不在本地维护权限信息</strong>。</li>
       </ul>
